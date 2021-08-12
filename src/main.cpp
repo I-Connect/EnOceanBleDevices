@@ -1,6 +1,8 @@
 #include "Arduino.h"
+#include "EnoceanBLEScanner.h"
 #include "EMDCB/EnOceanEMDCBEventAdapter.h"
 #include "STM550B/EnOceanSTM550BEventAdapter.h"
+#include "PTM215/EnOceanPTM215EventAdapter.h"
 #include "EnOceanUtils.h"
 
 #define PTM_BLE_ADDRESS "E2:15:00:00:D4:AD"
