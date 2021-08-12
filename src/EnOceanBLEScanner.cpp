@@ -299,15 +299,15 @@ Device BLEScanner::registerDevice(const std::string bleAddress, const byte secur
 }
 
 void BLEScanner::registerPTM215Device(const std::string bleAddress, const std::string securityKey, const uint8_t eventHandlerNodeId,
-                          bool buttonA0, bool buttonA1, bool buttonB0, bool buttonB1) {
+                                      bool buttonA0, bool buttonA1, bool buttonB0, bool buttonB1, const uint8_t refId) {
   Device device = registerDevice(bleAddress, securityKey);
-  ptm215Adapter.registerHandler(device, eventHandlerNodeId, buttonA0, buttonA1, buttonB0, buttonB1);
+  ptm215Adapter.registerHandler(device, eventHandlerNodeId, buttonA0, buttonA1, buttonB0, buttonB1, refId);
 }
 
 void BLEScanner::registerPTM215Device(const std::string bleAddress, const std::string securityKey, PTM215EventHandler* handler,
-                                      bool buttonA0, bool buttonA1, bool buttonB0, bool buttonB1) {
+                                      bool buttonA0, bool buttonA1, bool buttonB0, bool buttonB1, const uint8_t refId) {
   Device device = registerDevice(bleAddress, securityKey);
-  ptm215Adapter.registerHandler(device, handler, buttonA0, buttonA1, buttonB0, buttonB1);
+  ptm215Adapter.registerHandler(device, handler, buttonA0, buttonA1, buttonB0, buttonB1, refId);
 }
 
 void BLEScanner::registerEMDCBDevice(const std::string bleAddress, const std::string securityKey, EMDCBEventHandler* handler) {

@@ -25,18 +25,19 @@ PTM215EventAdapter::~PTM215EventAdapter() {
   }
 }
 
-void PTM215EventAdapter::registerHandler(Device& device, const uint8_t nodeId, bool buttonA0, bool buttonA1, bool buttonB0, bool buttonB1) {
-  if (ptm215EventHandlerMap.count(nodeId)) {
-    registerHandler(device, ptm215EventHandlerMap[nodeId], buttonA0, buttonA1, buttonB0, buttonB1);
+void PTM215EventAdapter::registerHandler(Device& device, const uint8_t handlerNodeId, bool buttonA0, bool buttonA1, bool buttonB0, bool buttonB1, const uint8_t refId) {
+  if (ptm215EventHandlerMap.count(handlerNodeId)) {
+    registerHandler(device, ptm215EventHandlerMap[handlerNodeId], buttonA0, buttonA1, buttonB0, buttonB1, refId);
   } else {
-    log_e("NodeId [%d] not found in ptm215EventHandlerMap", nodeId);
+    log_e("NodeId [%d] not found in ptm215EventHandlerMap", handlerNodeId);
   }
 }
 
-void PTM215EventAdapter::registerHandler(Device& device, PTM215EventHandler* handler, bool buttonA0, bool buttonA1, bool buttonB0, bool buttonB1) {
+void PTM215EventAdapter::registerHandler(Device& device, PTM215EventHandler* handler, bool buttonA0, bool buttonA1, bool buttonB0, bool buttonB1, const uint8_t refId) {
   HandlerRegistration reg;
   reg.address    = device.address;
   reg.handler    = handler;
+  reg.referenceId = refId;
   reg.buttons[0] = buttonA0;
   reg.buttons[1] = buttonA1;
   reg.buttons[2] = buttonB0;
@@ -53,7 +54,9 @@ void PTM215EventAdapter::handlePayload(Device& device, Payload& payload) {
 void PTM215EventAdapter::callEventHandlers(PTM215Event& event) {
   for (auto const& reg : handlers) {
     if ((reg.address == event.device->address) && reg.buttons[(uint8_t)event.button]) {
-      reg.handler->handleEvent(event);
+      PTM215Event evt = event; // Make copy to avoid modifications on parameter
+      evt.referenceId = reg.referenceId;
+      reg.handler->handleEvent(evt);
     }
   }
 }
