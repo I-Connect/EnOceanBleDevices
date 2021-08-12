@@ -1,5 +1,7 @@
-/** Manufacturer data */
+#pragma once
+#include "Arduino.h"
 
+/** Manufacturer data */
 const uint8_t ENOCEAN_PAYLOAD_TYPE = 0xFF;
 const uint8_t ENOCEAN_PAYLOAD_MANUFACTURER[2] = { 0xDA, 0x03 };
 
