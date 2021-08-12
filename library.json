@@ -1,8 +1,8 @@
 {
   "version": "3.0.0",
-  "name": "EnOcean_PTM215b",
+  "name": "EnOceanBleDevices",
   "description": "Implementation of EnOcean Selfpowered BLE devices",
-  "keywords": "enocean PTM215b PTM535BZ EMDCB STM550ble esp32 BLE",
+  "keywords": "Enocean PTM215b PTM535BZ EMDCB STM550B esp32 BLE",
   "authors":
   [
       {
@@ -16,7 +16,7 @@
   ],
   "repository": {
       "type": "git",
-      "url": "https://github.com/I-Connect/enocean_PTM215b.git"
+      "url": "https://github.com/I-Connect/EnOceanBleDevices.git"
   },
   "frameworks": "Arduino",
   "platforms": [
