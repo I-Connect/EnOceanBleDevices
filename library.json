@@ -1,33 +1,34 @@
 {
-    "name": "enocean_PTM215b",
-    "description": "Receive switch events via BLE to esp32",
-    "keywords": "enocean PTM215b ble esp32",
-    "authors":
-    [
-        {
-            "name": "Jeroen van de Vorst",
-            "maintainer": true
-        },
-        {
-            "name": "Bas Schouten"
-        }
-    ],
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/I-Connect/enocean_PTM215b.git"
-    },
-    "frameworks": "Arduino",
-    "platforms": [
-        "espressif32"
-    ],
-    "build": {
-        "flags": "-Wno-unused-function"
-    },
-    "dependencies": [
+  "version": "3.0.0",
+  "name": "EnOcean_PTM215b",
+  "description": "Implementation of EnOcean Selfpowered BLE devices",
+  "keywords": "enocean PTM215b PTM535BZ EMDCB STM550ble esp32 BLE",
+  "authors":
+  [
       {
-        "name": "ArduinoJson",
-        "version": "bblanchon/ArduinoJson"
+          "name": "Jeroen van de Vorst",
+          "maintainer": true,
+          "url": "I-Connect.online"
+      },
+      {
+          "name": "Bas Schouten"
+      }
+  ],
+  "repository": {
+      "type": "git",
+      "url": "https://github.com/I-Connect/enocean_PTM215b.git"
+  },
+  "frameworks": "Arduino",
+  "platforms": [
+      "espressif32"
+  ],
+  "build": {
+      "flags": "-Wno-unused-function"
+  },
+  "dependencies": [
+    {
+      "name": "NimBLE",
+      "version": "https://github.com/I-Connect/NimBLE-Arduino"
     }
-
   ]
 }
