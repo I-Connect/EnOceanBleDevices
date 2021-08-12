@@ -1,5 +1,4 @@
 #include "Arduino.h"
-#include "EnOceanBLEScanner.h"
 #include "EMDCB/EnOceanEMDCBEventAdapter.h"
 #include "STM550B/EnOceanSTM550BEventAdapter.h"
 #include "EnOceanUtils.h"
