@@ -1,7 +1,6 @@
 #include "Arduino.h"
 #include "EnoceanBLEScanner.h"
-#include "EMDCB/EnOceanEMDCBEventAdapter.h"
-#include "STM550B/EnOceanSTM550BEventAdapter.h"
+#include "MultiData/EnOceanDataEventAdapter.h"
 #include "PTM215/EnOceanPTM215EventAdapter.h"
 #include "EnOceanUtils.h"
 
@@ -26,12 +25,12 @@ public:
   }
 };
 
-class EMDCBHandler : public EnOcean::EMDCBEventHandler {
+class EMDCBHandler : public EnOcean::DataEventHandler {
 public:
-  EMDCBHandler(const uint8_t id) : EnOcean::EMDCBEventHandler(id) {};
+  EMDCBHandler(const uint8_t id) : EnOcean::DataEventHandler(id) {};
   virtual ~EMDCBHandler() {};
 
-  void handleEvent(EnOcean::EMDCBEvent& event) override {
+  void handleEvent(EnOcean::DataEvent& event) override {
     log_i("Handling EMDCB Event by node %d", getId());
     log_i("DeviceAddress: %s", event.device->address.toString().c_str());
     log_i("Parameters:");
@@ -44,12 +43,12 @@ public:
   }
 };
 
-class STM550Handler : public EnOcean::STM550BEventHandler {
+class STM550Handler : public EnOcean::DataEventHandler {
 public:
-  STM550Handler(const uint8_t id) : EnOcean::STM550BEventHandler(id) {};
+  STM550Handler(const uint8_t id) : EnOcean::DataEventHandler(id) {};
   virtual ~STM550Handler() {};
 
-  void handleEvent(EnOcean::STM550BEvent& event) override {
+  void handleEvent(EnOcean::DataEvent& event) override {
     log_i("Handling STM550B Event by node %d", getId());
     log_i("DeviceAddress: %s", event.device->address.toString().c_str());
     log_i("Parameters:");
@@ -65,7 +64,7 @@ public:
 EnOcean::BLEScanner* scanner;
 
 void testEMDCBSignature() {
-  EnOcean::EMDCBEventAdapter adapter;
+  EnOcean::DataEventAdapter adapter;
 
   EnOcean::Device device;
   device.address = NimBLEAddress("E5:00:00:00:00:C4");
@@ -90,7 +89,7 @@ void testEMDCBSignature() {
 }
 
 void testSTM550Signature() {
-  EnOcean::STM550BEventAdapter adapter;
+  EnOcean::DataEventAdapter adapter;
 
   EnOcean::Device device;
   device.address = NimBLEAddress("E5:00:77:01:00:00");
@@ -165,9 +164,9 @@ void setup() {
   // register handler for A1, B0 and B1 buttons, using nodeId of handler
   scanner->registerPTM215Device(PTM_BLE_ADDRESS, PTM_SECURITY_KEY, 2, false, true, true, true, 37);
 
-  scanner->registerEMDCBDevice(EMDCB_BLE_ADDRESS, EMDCB_SECURITY_KEY, emdcbHandler);
+  scanner->registerDataDevice(EMDCB_BLE_ADDRESS, EMDCB_SECURITY_KEY, emdcbHandler);
 
-  scanner->registerSTM550BDevice(STM550_BLE_ADDRESS, STM550_SECURITY_KEY, stmHandler);
+  scanner->registerDataDevice(STM550_BLE_ADDRESS, STM550_SECURITY_KEY, stmHandler);
   log_i("Initialization done");
   log_i("===========================================");
 

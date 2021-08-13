@@ -232,12 +232,12 @@ void BLEScanner::handleDataPayload(NimBLEAddress& bleAddress, Payload& payload) 
           break;
         }
         case DeviceType::EMDCB: {
-          emdcbAdapter.handlePayload(device, payload);
+          dataAdapter.handlePayload(device, payload);
           break;
         }
 
         case DeviceType::STM550B: {
-          stm550Adapter.handlePayload(device, payload);
+          dataAdapter.handlePayload(device, payload);
           break;
         }
 
@@ -310,15 +310,11 @@ void BLEScanner::registerPTM215Device(const std::string bleAddress, const std::s
   ptm215Adapter.registerHandler(device, handler, buttonA0, buttonA1, buttonB0, buttonB1, refId);
 }
 
-void BLEScanner::registerEMDCBDevice(const std::string bleAddress, const std::string securityKey, EMDCBEventHandler* handler) {
+void BLEScanner::registerDataDevice(const std::string bleAddress, const std::string securityKey, DataEventHandler* handler) {
   Device device = registerDevice(bleAddress, securityKey);
-  emdcbAdapter.registerHandler(device, handler);
+  dataAdapter.registerHandler(device, handler);
 }
 
-void BLEScanner::registerSTM550BDevice(const std::string bleAddress, const std::string securityKey, STM550BEventHandler* handler) {
-  Device device = registerDevice(bleAddress, securityKey);
-  stm550Adapter.registerHandler(device, handler);
-}
 
 void BLEScanner::unRegisterAddress(const NimBLEAddress address) {
   devices.erase(address);

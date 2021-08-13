@@ -8,27 +8,6 @@ void hexStringToByteArray(std::string stringInput, byte* output, uint8_t byteLen
   }
 }
 
-std::vector<Parameter> parsePayloadParameters(byte* payload, const uint8_t size) {
-  std::vector<Parameter> result;
-  byte* payloadPtr = payload;
-  
-  while (payloadPtr < payload + size) {
-    Parameter parameter;
-    parameter.size = pow(2, *payloadPtr >> 6);                      // leftmost 2 bits
-    parameter.type = (ParameterType)(*payloadPtr & 0b00111111);     // rightmost 6 bits
-    payloadPtr++;
-    if (parameter.size > 4) { // custom size, specified in first byte of data
-      parameter.size = *payloadPtr++;
-      // TODO read custom size parameter, skipped for now
-    } else {
-      memcpy(&parameter.value, payloadPtr, parameter.size);
-    }
-    payloadPtr += parameter.size;
-    result.push_back(parameter);
-  }
-  return result;
-}
-
 void printBuffer(const byte* buff, const uint8_t size, const boolean asChars, const char* header) {
   char b[strlen(header) + 2 + size * 3 + 1] { 0 };
   Serial.println(printBuffer(buff, size, asChars, header, b));

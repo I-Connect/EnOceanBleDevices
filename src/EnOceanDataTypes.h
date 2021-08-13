@@ -64,6 +64,16 @@ struct Parameter {
     uint16_t uint16;
     uint8_t uint8;
   } value { 0x00 };
+
+  int getValueAsInt() {
+    if (size == 1) {
+      return value.uint8;
+    } else if (size == 2) {
+      return value.uint16;
+    } else {
+      return value.uint32;
+    }
+  }
 };
 
 

@@ -4,8 +4,7 @@
 #include "EnOceanConstants.h"
 #include "EnOceanDataTypes.h"
 #include "PTM215/EnOceanPTM215EventAdapter.h"
-#include "EMDCB/EnOceanEMDCBEventAdapter.h"
-#include "STM550B/EnOceanSTM550BEventAdapter.h"
+#include "MultiData/EnOceanDataEventAdapter.h"
 #include "NimBLEDevice.h"
 #include <map>
 
@@ -80,16 +79,7 @@ public:
    * @param securityKey Security key retrieved from QR code, NFC or commissioning data
    * @param handler PayloadHandler that will be called on receipt of an event on the bleAddress
    */ 
-  void registerEMDCBDevice(const std::string bleAddress, const std::string securityKey, EMDCBEventHandler* handler);
-
-  /**
-   * @brief Register an EnOcean STM550B device (multi sensor)
-   *
-   * @param bleAddress BLE address of device being handled
-   * @param securityKey Security key retrieved from QR code, NFC or commissioning data
-   * @param handler PayloadHandler that will be called on receipt of an event on the bleAddress
-   */ 
-  void registerSTM550BDevice(const std::string bleAddress, const std::string securityKey, STM550BEventHandler* handler);
+  void registerDataDevice(const std::string bleAddress, const std::string securityKey, DataEventHandler* handler);
 
   void unRegisterAddress(const NimBLEAddress address);
 
@@ -108,8 +98,7 @@ private:
   NimBLEAddress activeCommissioningAddress{}; 
 
   PTM215EventAdapter ptm215Adapter;
-  EMDCBEventAdapter emdcbAdapter;
-  STM550BEventAdapter stm550Adapter;
+  DataEventAdapter dataAdapter;
 
   Device registerDevice(const std::string bleAddress, const std::string securityKey);
   Device registerDevice(const std::string bleAddress, const byte securityKey[16]);
