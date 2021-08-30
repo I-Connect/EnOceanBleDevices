@@ -10,11 +10,11 @@ enum class PayloadType {
 };
 
 enum class DeviceType {
-  UNKNOWN,
-  PTM215B,    // Switches
-  PTM535BZ,   // ??
-  EMDCB,      // Motion detector
-  STM550B     // Multi sensor
+  UNKNOWN = 0,
+  PTM215B,  // Switches
+  PTM535BZ, // ??
+  EMDCB,    // Motion detector
+  STM550B   // Multi sensor
 };
 
 struct Payload {
@@ -44,15 +44,15 @@ struct Device {
 };
 
 enum class ParameterType : byte {
-  Temperature = 0x00,
-  BatteryVoltage = 0x01,
-  EnergyLevel = 0x02,
+  Temperature     = 0x00,
+  BatteryVoltage  = 0x01,
+  EnergyLevel     = 0x02,
   LightLevelSolar = 0x04,
-  LightLevel = 0x05,
-  Humidity = 0x06,
-  Acceleration = 0x0A,
-  Occupancy = 0x20,
-  MagnetContact = 0x23
+  LightLevel      = 0x05,
+  Humidity        = 0x06,
+  Acceleration    = 0x0A,
+  Occupancy       = 0x20,
+  MagnetContact   = 0x23
 };
 
 // TODO Handle custom length parameters
@@ -63,7 +63,7 @@ struct Parameter {
     uint32_t uint32;
     uint16_t uint16;
     uint8_t uint8;
-  } value { 0x00 };
+  } value{0x00};
 
   int getValueAsInt() {
     if (size == 1) {
@@ -76,6 +76,19 @@ struct Parameter {
   }
 };
 
+enum class AccelerometerStatus {
+  OutOfBounds    = 0,
+  PeriodicUpdate = 1,
+  Wake           = 2,
+  Disabled       = 3
+};
+
+struct AccelerometerValues {
+  AccelerometerStatus status;
+  int16_t xVector;
+  int16_t yVector;
+  int16_t zVector;
+};
 
 struct CommissioningEvent {
   NimBLEAddress address;

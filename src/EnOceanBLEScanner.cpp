@@ -61,12 +61,16 @@ void BLEScanner::setScanTaskPriority(uint8_t prio) {
 void BLEScanner::onResult(NimBLEAdvertisedDevice* advertisedDevice) {
   Payload payload = getPayload(advertisedDevice);
 
+  if (payload.deviceType == DeviceType::UNKNOWN) {
+    return;
+  }
+
   if ((payload.type != ENOCEAN_PAYLOAD_TYPE) || (memcmp(payload.manufacturerId, ENOCEAN_PAYLOAD_MANUFACTURER, sizeof(ENOCEAN_PAYLOAD_MANUFACTURER)) != 0)) {
     return;
   }
 
 #ifdef DEBUG_ENOCEAN
-  log_d("EnOcean event received from %s", advertisedDevice->getAddress().toString().c_str());
+  log_d("EnOcean event received from %s (counter: %u)", advertisedDevice->getAddress().toString().c_str(), payload.sequenceCounter);
 #endif
 
   NimBLEAddress bleAddress = advertisedDevice->getAddress();
@@ -325,16 +329,16 @@ DeviceType BLEScanner::getTypeFromAddress(const NimBLEAddress& address) {
   uint8_t nativeAddress[6];
   std::reverse_copy(nativeAddressLSB, nativeAddressLSB + 6, nativeAddress);
 
-  if (memcmp(nativeAddress, STM550B_EMBCD_PREFIX_ADDRESS, sizeof(STM550B_EMBCD_PREFIX_ADDRESS)) == 0) {
-    if (nativeAddress[2] & 0xF0 == 1) {
+  if (memcmp(nativeAddress, STM550B_EMDCB_PREFIX_ADDRESS, sizeof(STM550B_EMDCB_PREFIX_ADDRESS)) == 0) {
+    if ((nativeAddress[2] & 0xF0) == 0x10) {
       return DeviceType::STM550B;
-    } else if (nativeAddress[2] & 0xF0 == 0) {
+    } else if ((nativeAddress[2] & 0xF0) == 0) {
       return DeviceType::EMDCB;
     }
   }
 
   if (memcmp(nativeAddress, PTM_PREFIX_ADDRESS, sizeof(PTM_PREFIX_ADDRESS)) == 0) {
-    if ((nativeAddress[2] & 0xF0) == 1) {
+    if ((nativeAddress[2] & 0xF0) == 0x10) {
       return DeviceType::PTM535BZ;
     }
 
