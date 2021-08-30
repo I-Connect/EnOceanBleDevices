@@ -325,15 +325,15 @@ DeviceType BLEScanner::getTypeFromAddress(const NimBLEAddress& address) {
   uint8_t nativeAddress[6];
   std::reverse_copy(nativeAddressLSB, nativeAddressLSB + 6, nativeAddress);
 
-  if (memcmp(nativeAddress, STM550B_PREFIX_ADDRESS, sizeof(STM550B_PREFIX_ADDRESS)) == 0) {
-    return DeviceType::STM550B;
+  if (memcmp(nativeAddress, STM550B_EMBCD_PREFIX_ADDRESS, sizeof(STM550B_EMBCD_PREFIX_ADDRESS)) == 0) {
+    if (nativeAddress[2] & 0xF0 == 1) {
+      return DeviceType::STM550B;
+    } else if (nativeAddress[2] & 0xF0 == 0) {
+      return DeviceType::EMDCB;
+    }
   }
 
-  if (memcmp(nativeAddress, EMDCB_PREFIX_ADDRESS, sizeof(EMDCB_PREFIX_ADDRESS)) == 0) {
-    return DeviceType::EMDCB;
-  }
-
-  if (memcmp(nativeAddress, PTM215B_PREFIX_ADDRESS, sizeof(PTM215B_PREFIX_ADDRESS)) == 0) {
+  if (memcmp(nativeAddress, PTM_PREFIX_ADDRESS, sizeof(PTM_PREFIX_ADDRESS)) == 0) {
     if ((nativeAddress[2] & 0xF0) == 1) {
       return DeviceType::PTM535BZ;
     }
