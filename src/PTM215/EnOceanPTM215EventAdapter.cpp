@@ -6,9 +6,9 @@
 namespace EnOcean {
 
 void repeatEventsTask(void* pvParameters) {
-#ifdef DEBUG_ENOCEAN
+  #ifdef DEBUG_ENOCEAN
   log_d("TASK: PTM215b repeatEvents task started on core: %d", xPortGetCoreID());
-#endif
+  #endif
   esp_task_wdt_add(NULL);
   PTM215EventAdapter* adapter = static_cast<PTM215EventAdapter*>(pvParameters);
 

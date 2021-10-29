@@ -17,6 +17,8 @@ enum class DeviceType {
   STM550B   // Multi sensor
 };
 
+typedef byte SecurityKey[16];
+
 struct Payload {
   byte len;
   byte type;
@@ -30,7 +32,7 @@ struct Payload {
       byte signature[4];
     } data;
     struct { // Commissioning
-      byte securityKey[16];
+      SecurityKey securityKey;
       byte staticSourceAddress[6]; // LSB first
     } commissioning;
   };
@@ -38,7 +40,7 @@ struct Payload {
 
 struct Device {
   NimBLEAddress address;
-  uint8_t securityKey[16]      = {0};
+  SecurityKey securityKey {0};
   uint32_t lastSequenceCounter = 0;
   DeviceType type;
 };
@@ -91,24 +93,24 @@ struct AccelerometerValues {
 };
 
 struct CommissioningEvent {
-  NimBLEAddress address;
+  NimBLEAddress address = NimBLEAddress("");
   DeviceType type;
-  byte securityKey[17];
+  SecurityKey securityKey;
 };
 
 /**
  * @brief Handler for commissionEvents from a BLE Switch
- * 
- * The event is sent when the swtich is put into commissioning mode and when the same
+ *
+ * The event is sent when the switch is put into commissioning mode and when the same
  * button is pressed or released when in commissioning mode.
- * 
+ *
  * Note that the handler must be able to handle receiving the same commission event multiple times!
  */
 class CommissioningEventhandler {
-public:
-  CommissioningEventhandler(){};
-  virtual ~CommissioningEventhandler(){};
-  virtual void handleEvent(CommissioningEvent& evt) = 0;
+  public:
+    CommissioningEventhandler() {};
+    virtual ~CommissioningEventhandler() {};
+    virtual void handleEvent(CommissioningEvent& evt) = 0;
 };
 
 } // namespace EnOcean

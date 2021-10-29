@@ -10,9 +10,9 @@
 namespace EnOcean {
 
 void bleScanTask(void* pvParameters) {
-#ifdef DEBUG_ENOCEAN
+  #ifdef DEBUG_ENOCEAN
   log_d("TASK: EnOcean BLE scan task started on core: %d", xPortGetCoreID());
-#endif
+  #endif
   //TODO implement watchdog? Is triggered by the blocking start call below
   BLEScanner* scanner  = static_cast<BLEScanner*>(pvParameters);
   NimBLEScan* pBLEScan = NimBLEDevice::getScan();        // get global scan-object
@@ -33,8 +33,9 @@ BLEScanner::BLEScanner() {
 }
 
 BLEScanner::~BLEScanner() {
-  if (bleScanTaskHandle)
+  if (bleScanTaskHandle) {
     vTaskDelete(bleScanTaskHandle);
+  }
 }
 
 void BLEScanner::initialize() {
@@ -69,9 +70,9 @@ void BLEScanner::onResult(NimBLEAdvertisedDevice* advertisedDevice) {
     return;
   }
 
-#ifdef DEBUG_ENOCEAN
+  #ifdef DEBUG_ENOCEAN
   log_d("EnOcean event received from %s (counter: %u)", advertisedDevice->getAddress().toString().c_str(), payload.sequenceCounter);
-#endif
+  #endif
 
   NimBLEAddress bleAddress = advertisedDevice->getAddress();
   if (payload.payloadType == PayloadType::Commissioning) {
@@ -114,7 +115,7 @@ bool BLEScanner::securityKeyValid(Device& device, Payload& payload) {
   unsigned char nonce[13] {0};
   uint8_t a0Flag          = 0x01;
   uint8_t b0Flag          = 0x49;
-  uint16_t inputLength    = payload.len + 1; // include the length byte 
+  uint16_t inputLength    = payload.len + 1; // include the length byte
   unsigned char a0[16]    {0};
   unsigned char b0[16]    {0};
   unsigned char b1[16]    {0};
@@ -142,7 +143,7 @@ bool BLEScanner::securityKeyValid(Device& device, Payload& payload) {
   memcpy(&b1[6], &payload.sequenceCounter, sizeof(payload.sequenceCounter));
 
   if (inputLength <= 18) {
-    memcpy(&b1[10], payload.data.raw, inputLength - 12);  
+    memcpy(&b1[10], payload.data.raw, inputLength - 12);
   } else {
     memcpy(&b1[10], payload.data.raw, 6);
     memcpy(b2, payload.data.raw + 6, inputLength - 18);
@@ -223,9 +224,8 @@ bool BLEScanner::securityKeyValid(Device& device, Payload& payload) {
 void BLEScanner::handleDataPayload(NimBLEAddress& bleAddress, Payload& payload) {
   if (activeCommissioningAddress == bleAddress) {
     // Data event received from active commissioning address -> end commissioning mode
-    activeCommissioningAddress = NimBLEAddress();
+    activeCommissioningAddress = NimBLEAddress("");
   }
-
   if (devices.count(bleAddress)) {
     Device& device = devices[bleAddress];
     if ((device.lastSequenceCounter < payload.sequenceCounter) && securityKeyValid(device, payload)) {
@@ -255,10 +255,15 @@ void BLEScanner::handleDataPayload(NimBLEAddress& bleAddress, Payload& payload) 
 }
 
 void BLEScanner::handleCommissioningPayload(NimBLEAddress& bleAddress, Payload& payload) {
+  if (!commissioningEventhandler) {
+    log_w("No commissioning handler");
+    return;
+  }
+
   if ((uint64_t)activeCommissioningAddress == 0) {
     activeCommissioningAddress = bleAddress;
   } else if (activeCommissioningAddress != bleAddress) {
-    log_w("Ignored commissioning for %s, already active for %s", bleAddress, activeCommissioningAddress);
+    log_w("Ignored commissioning for %s, already active for %s", bleAddress.toString().c_str(), activeCommissioningAddress.toString().c_str());
     return;
   }
 
@@ -267,34 +272,32 @@ void BLEScanner::handleCommissioningPayload(NimBLEAddress& bleAddress, Payload& 
     return;
   }
 
-  if (commissioningEventhandler) {
-    lastCommissioningCounter = payload.sequenceCounter;
-    // Reverse order of bytes for NimBLEAddress
-    byte addressBytes[6];
-    for (uint8_t i = 0; i < 6; i++) {
-      addressBytes[i] = payload.commissioning.staticSourceAddress[5 - i];
-    }
-
-    NimBLEAddress address{addressBytes};
-
-    CommissioningEvent event;
-    event.address = address;
-    event.type    = getTypeFromAddress(address);
-    memcpy(event.securityKey, payload.commissioning.securityKey, 16);
-    event.securityKey[16] = 0; // Add char terminator
-    commissioningEventhandler->handleEvent(event);
+  lastCommissioningCounter = payload.sequenceCounter;
+  // Reverse order of bytes for NimBLEAddress
+  byte addressBytes[6];
+  for (uint8_t i = 0; i < 6; i++) {
+    addressBytes[i] = payload.commissioning.staticSourceAddress[5 - i];
   }
+
+  NimBLEAddress address{addressBytes};
+
+  CommissioningEvent event;
+  event.address = address;
+  event.type    = getTypeFromAddress(address);
+  memcpy(event.securityKey, payload.commissioning.securityKey, sizeof(SecurityKey));
+  commissioningEventhandler->handleEvent(event);
 }
 
 Device BLEScanner::registerDevice(const std::string bleAddress, const std::string securityKey) {
   byte key[16];
-  hexStringToByteArray(securityKey, key, 16);
+  hexStringToByteArray(securityKey, key, sizeof(SecurityKey));
   return registerDevice(bleAddress, key);
 }
 
-Device BLEScanner::registerDevice(const std::string bleAddress, const byte securityKey[16]) {
+Device BLEScanner::registerDevice(const std::string bleAddress, const SecurityKey securityKey) {
+  log_d("Registering address %s", bleAddress.c_str());
   Device device;
-  memcpy(device.securityKey, securityKey, 16);
+  memcpy(device.securityKey, securityKey, sizeof(SecurityKey));
   NimBLEAddress address{bleAddress};
   device.address   = address;
   device.type      = getTypeFromAddress(address);
@@ -309,6 +312,12 @@ void BLEScanner::registerPTM215Device(const std::string bleAddress, const std::s
 }
 
 void BLEScanner::registerPTM215Device(const std::string bleAddress, const std::string securityKey, PTM215EventHandler* handler,
+                                      bool buttonA0, bool buttonA1, bool buttonB0, bool buttonB1, const uint8_t refId) {
+  Device device = registerDevice(bleAddress, securityKey);
+  ptm215Adapter.registerHandler(device, handler, buttonA0, buttonA1, buttonB0, buttonB1, refId);
+}
+
+void BLEScanner::registerPTM215Device(const std::string bleAddress, const SecurityKey securityKey, PTM215EventHandler* handler,
                                       bool buttonA0, bool buttonA1, bool buttonB0, bool buttonB1, const uint8_t refId) {
   Device device = registerDevice(bleAddress, securityKey);
   ptm215Adapter.registerHandler(device, handler, buttonA0, buttonA1, buttonB0, buttonB1, refId);
