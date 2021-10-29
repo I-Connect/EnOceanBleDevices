@@ -255,6 +255,7 @@ void BLEScanner::handleDataPayload(NimBLEAddress& bleAddress, Payload& payload) 
 }
 
 void BLEScanner::handleCommissioningPayload(NimBLEAddress& bleAddress, Payload& payload) {
+  ptm215Adapter.cancelRepeat();
   if (!commissioningEventhandler) {
     log_w("No commissioning handler");
     return;
@@ -271,6 +272,7 @@ void BLEScanner::handleCommissioningPayload(NimBLEAddress& bleAddress, Payload& 
     // discard repeated messages
     return;
   }
+
 
   lastCommissioningCounter = payload.sequenceCounter;
   // Reverse order of bytes for NimBLEAddress

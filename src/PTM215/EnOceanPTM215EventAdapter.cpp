@@ -61,6 +61,11 @@ void PTM215EventAdapter::callEventHandlers(PTM215Event& event) {
   }
 }
 
+void PTM215EventAdapter::cancelRepeat() {
+  lastEvents.clear();
+  suspendRepeatTask();
+}
+
 void PTM215EventAdapter::manageEventList(PTM215Event& event) {
   NimBLEAddress address = event.device->address;
   if (event.eventType == EventType::Pushed) {
