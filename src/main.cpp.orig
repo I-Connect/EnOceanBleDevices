@@ -14,51 +14,51 @@
 #define STM550_SECURITY_KEY "F58AFD8719BAB1600B2CCCD06FAE1A98"
 
 class PTMHandler : public EnOcean::PTM215EventHandler {
-  public:
-    PTMHandler(const uint8_t id) : EnOcean::PTM215EventHandler(id) {};
-    virtual ~PTMHandler() {};
+public:
+  PTMHandler(const uint8_t id) : EnOcean::PTM215EventHandler(id) {};
+  virtual ~PTMHandler() {};
 
-    void handleEvent(EnOcean::PTM215Event& event) override {
-      log_i("Handling PTM Event by node %d", getId());
-      log_i("DeviceAddress: %s", event.device->address.toString().c_str());
-      log_i("Event: ReferenceId: %d button %d type %d", event.referenceId, event.button, event.eventType);
-    }
+  void handleEvent(EnOcean::PTM215Event& event) override {
+    log_i("Handling PTM Event by node %d", getId());
+    log_i("DeviceAddress: %s", event.device->address.toString().c_str());
+    log_i("Event: ReferenceId: %d button %d type %d", event.referenceId, event.button, event.eventType);
+  }
 };
 
 class EMDCBHandler : public EnOcean::DataEventHandler {
-  public:
-    EMDCBHandler(const uint8_t id) : EnOcean::DataEventHandler(id) {};
-    virtual ~EMDCBHandler() {};
+public:
+  EMDCBHandler(const uint8_t id) : EnOcean::DataEventHandler(id) {};
+  virtual ~EMDCBHandler() {};
 
-    void handleEvent(EnOcean::DataEvent& event) override {
-      log_i("Handling EMDCB Event by node %d", getId());
-      log_i("DeviceAddress: %s", event.device->address.toString().c_str());
-      log_i("Parameters:");
-      log_i("\tType \tSize Value");
-      log_i("-----------------------------");
-      for (auto const& parameter : event.parameters) {
-        char b[5];
-        log_i("\t0x%02x \t   %d %s", parameter.type, parameter.size, EnOcean::printBuffer((byte*)&parameter.value, parameter.size, false, "", b));
-      }
+  void handleEvent(EnOcean::DataEvent& event) override {
+    log_i("Handling EMDCB Event by node %d", getId());
+    log_i("DeviceAddress: %s", event.device->address.toString().c_str());
+    log_i("Parameters:");
+    log_i("\tType \tSize Value");
+    log_i("-----------------------------");
+    for (auto const& parameter : event.parameters) {
+      char b[5];
+      log_i("\t0x%02x \t   %d %s", parameter.type, parameter.size, EnOcean::printBuffer((byte*)&parameter.value, parameter.size, false, "", b));  
     }
+  }
 };
 
 class STM550Handler : public EnOcean::DataEventHandler {
-  public:
-    STM550Handler(const uint8_t id) : EnOcean::DataEventHandler(id) {};
-    virtual ~STM550Handler() {};
+public:
+  STM550Handler(const uint8_t id) : EnOcean::DataEventHandler(id) {};
+  virtual ~STM550Handler() {};
 
-    void handleEvent(EnOcean::DataEvent& event) override {
-      log_i("Handling STM550B Event by node %d", getId());
-      log_i("DeviceAddress: %s", event.device->address.toString().c_str());
-      log_i("Parameters:");
-      log_i("\tType \tSize Value");
-      log_i("-----------------------------");
-      for (auto const& parameter : event.parameters) {
-        char b[5];
-        log_i("\t0x%02x \t   %d %s", parameter.type, parameter.size, EnOcean::printBuffer((byte*)&parameter.value, parameter.size, false, "", b));
-      }
+  void handleEvent(EnOcean::DataEvent& event) override {
+    log_i("Handling STM550B Event by node %d", getId());
+    log_i("DeviceAddress: %s", event.device->address.toString().c_str());
+    log_i("Parameters:");
+    log_i("\tType \tSize Value");
+    log_i("-----------------------------");
+    for (auto const& parameter : event.parameters) {
+      char b[5];
+      log_i("\t0x%02x \t   %d %s", parameter.type, parameter.size, EnOcean::printBuffer((byte*)&parameter.value, parameter.size, false, "", b));  
     }
+  }
 };
 
 EnOcean::BLEScanner* scanner;
