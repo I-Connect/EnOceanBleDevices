@@ -1,5 +1,5 @@
 #include "Arduino.h"
-#include "EnOceanBLEScanner.h"
+#include "EnOceanBLEScannerSubscriber.h"
 #include "MultiData/EnOceanDataEventAdapter.h"
 #include "PTM215/EnOceanPTM215EventAdapter.h"
 #include "EnOceanUtils.h"
