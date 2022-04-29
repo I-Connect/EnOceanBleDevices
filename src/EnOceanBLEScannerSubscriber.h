@@ -6,7 +6,7 @@
 #include "PTM215/EnOceanPTM215EventAdapter.h"
 #include "MultiData/EnOceanDataEventAdapter.h"
 #include "NimBLEDevice.h"
-#include "BLEScanner/BleInterfaces.h"
+#include "BleInterfaces.h"
 #include <map>
 
 
