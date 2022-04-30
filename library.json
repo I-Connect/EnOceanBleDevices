@@ -3,32 +3,31 @@
   "name": "EnOceanBleDevices",
   "description": "Implementation of EnOcean Selfpowered BLE devices",
   "keywords": "Enocean PTM215b PTM535BZ EMDCB STM550B esp32 BLE",
-  "authors":
-  [
-      {
-          "name": "Jeroen van de Vorst",
-          "maintainer": true,
-          "url": "I-Connect.online"
-      },
-      {
-          "name": "Bas Schouten"
-      }
+  "authors": [
+    {
+      "name": "Jeroen van de Vorst",
+      "maintainer": true,
+      "url": "I-Connect.online"
+    },
+    {
+      "name": "Bas Schouten"
+    }
   ],
   "repository": {
-      "type": "git",
-      "url": "https://github.com/I-Connect/EnOceanBleDevices.git"
+    "type": "git",
+    "url": "https://github.com/I-Connect/EnOceanBleDevices.git"
   },
   "frameworks": "Arduino",
   "platforms": [
-      "espressif32"
+    "espressif32"
   ],
   "build": {
-      "flags": "-Wno-unused-function"
+    "flags": "-Wno-unused-function"
   },
   "dependencies": [
     {
       "name": "NimBLE-Arduino",
-      "version": "https://github.com/h2zero/NimBLE-Arduino"
+      "version": "https://github.com/h2zero/NimBLE-Arduino@^1.3.7"
     }
   ]
 }
