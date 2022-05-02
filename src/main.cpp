@@ -154,6 +154,8 @@ void setup() {
   handler2 = new PTMHandler(2);
   emdcbHandler = new EMDCBHandler(3);
   stmHandler = new STM550Handler(4);
+
+  scanner.setScanDuration(1);
   scanner.subscribe(&scannerSubscriber);
 
   NimBLEDevice::init("ESP32_client");
@@ -178,6 +180,6 @@ void setup() {
 }
 
 void loop() {
-  // Nothing to do here
-  delay(1000);
+  scanner.update();
+  delay(100);
 }
