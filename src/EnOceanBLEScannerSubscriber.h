@@ -28,7 +28,7 @@ namespace EnOcean {
  * Before calling initialize() to create and start the tasks, the global
  * BLEDevice must have been initialized with BLEDevice::init()
  */
-class BLEScannerSubscriber : public BLEScannerSubscriber {
+class BLEScannerSubscriber : public BleScanner::Subscriber {
   public:
     BLEScannerSubscriber();
     virtual ~BLEScannerSubscriber();

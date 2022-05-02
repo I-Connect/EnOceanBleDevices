@@ -62,7 +62,7 @@ class STM550Handler : public EnOcean::DataEventHandler {
     }
 };
 
-BleScanner scanner;
+BleScanner::Scanner scanner;
 EnOcean::BLEScannerSubscriber scannerSubscriber;
 
 void testEMDCBSignature() {

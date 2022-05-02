@@ -1,5 +1,5 @@
 #pragma once
-#include "DataTypes.h"
+#include "EnOceanDataTypes.h"
 #include "PTM215Eventhandler.h"
 #include "bitset"
 #include "map"
