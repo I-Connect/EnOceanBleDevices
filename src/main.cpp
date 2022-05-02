@@ -1,4 +1,5 @@
 #include "Arduino.h"
+#include "BleScanner.h"
 #include "EnOceanBLEScannerSubscriber.h"
 #include "MultiData/EnOceanDataEventAdapter.h"
 #include "PTM215/EnOceanPTM215EventAdapter.h"
@@ -61,7 +62,8 @@ class STM550Handler : public EnOcean::DataEventHandler {
     }
 };
 
-EnOcean::BLEScanner* scanner;
+BleScanner scanner;
+EnOcean::EnOceanBLEScannerSubscriber scannerSubscriber;
 
 void testEMDCBSignature() {
   EnOcean::DataEventAdapter adapter;
@@ -85,7 +87,7 @@ void testEMDCBSignature() {
   memcpy(payload.data.signature, signature, 4);
 
   // EnOcean::printBuffer((byte*)&payload, sizeof(payload), false, "Test Payload");
-  log_i("EMDCB Test Security key %s", scanner->securityKeyValid(device, payload) ? "valid" : "NOT valid");
+  log_i("EMDCB Test Security key %s", scannerSubscriber.securityKeyValid(device, payload) ? "valid" : "NOT valid");
 }
 
 void testSTM550Signature() {
@@ -110,7 +112,7 @@ void testSTM550Signature() {
   memcpy(payload.data.signature, signature, 4);
 
   // EnOcean::printBuffer((byte*)&payload, sizeof(payload), false, "Test Payload");
-  log_i("STM550 Test Security key %s", scanner->securityKeyValid(device, payload) ? "valid" : "NOT valid");
+  log_i("STM550 Test Security key %s", scannerSubscriber.securityKeyValid(device, payload) ? "valid" : "NOT valid");
 }
 
 void testPTMSignature() {
@@ -136,7 +138,7 @@ void testPTMSignature() {
 
   // EnOcean::printBuffer((byte*)&payload, sizeof(payload), false, "Payload");
 
-  log_i("PTM215 Test Security key %s", scanner->securityKeyValid(device, payload) ? "valid" : "NOT valid");
+  log_i("PTM215 Test Security key %s", scannerSubscriber.securityKeyValid(device, payload) ? "valid" : "NOT valid");
 }
 
 PTMHandler* handler1;
@@ -148,25 +150,25 @@ void setup() {
   Serial.begin(115200);
   log_i("Starting EnOcean BLE Example application...");
 
-  scanner = new EnOcean::BLEScanner();
   handler1 = new PTMHandler(1);
   handler2 = new PTMHandler(2);
   emdcbHandler = new EMDCBHandler(3);
   stmHandler = new STM550Handler(4);
+  scanner.subscribe(&scannerSubscriber);
 
   NimBLEDevice::init("ESP32_client");
 
-  scanner->initialize();
+  scanner.initialize();
 
   log_d("Adding devices");
   // register handler for A0 and B0 buttons using pointer to handler
-  scanner->registerPTM215Device(PTM_BLE_ADDRESS, PTM_SECURITY_KEY, handler1, true, false, true, false, 15);
+  scannerSubscriber.registerPTM215Device(PTM_BLE_ADDRESS, PTM_SECURITY_KEY, handler1, true, false, true, false, 15);
   // register handler for A1, B0 and B1 buttons, using nodeId of handler
-  scanner->registerPTM215Device(PTM_BLE_ADDRESS, PTM_SECURITY_KEY, 2, false, true, true, true, 37);
+  scannerSubscriber.registerPTM215Device(PTM_BLE_ADDRESS, PTM_SECURITY_KEY, 2, false, true, true, true, 37);
 
-  scanner->registerDataDevice(EMDCB_BLE_ADDRESS, EMDCB_SECURITY_KEY, emdcbHandler);
+  scannerSubscriber.registerDataDevice(EMDCB_BLE_ADDRESS, EMDCB_SECURITY_KEY, emdcbHandler);
 
-  scanner->registerDataDevice(STM550_BLE_ADDRESS, STM550_SECURITY_KEY, stmHandler);
+  scannerSubscriber.registerDataDevice(STM550_BLE_ADDRESS, STM550_SECURITY_KEY, stmHandler);
   log_i("Initialization done");
   log_i("===========================================");
 
