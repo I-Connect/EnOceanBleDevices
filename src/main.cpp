@@ -1,8 +1,8 @@
 #include "Arduino.h"
 #include "BleScanner.h"
 #include "EnOceanBLEScannerSubscriber.h"
-#include "MultiData/EnOceanDataEventAdapter.h"
-#include "PTM215/EnOceanPTM215EventAdapter.h"
+#include "MultiData/DataEventAdapter.h"
+#include "PTM215/PTM215EventAdapter.h"
 #include "EnOceanUtils.h"
 
 #define PTM_BLE_ADDRESS "E2:15:00:00:D4:AD"
@@ -63,7 +63,7 @@ class STM550Handler : public EnOcean::DataEventHandler {
 };
 
 BleScanner scanner;
-EnOcean::EnOceanBLEScannerSubscriber scannerSubscriber;
+EnOcean::BLEScannerSubscriber scannerSubscriber;
 
 void testEMDCBSignature() {
   EnOcean::DataEventAdapter adapter;

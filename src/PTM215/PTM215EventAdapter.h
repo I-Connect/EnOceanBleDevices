@@ -1,6 +1,6 @@
 #pragma once
-#include "EnOceanDataTypes.h"
-#include "EnOceanPTM215Eventhandler.h"
+#include "DataTypes.h"
+#include "PTM215Eventhandler.h"
 #include "bitset"
 #include "map"
 #include "vector"

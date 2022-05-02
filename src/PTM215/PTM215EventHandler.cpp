@@ -1,4 +1,4 @@
-#include "EnOceanPTM215Eventhandler.h"
+#include "PTM215Eventhandler.h"
 
 namespace EnOcean {
 

@@ -9,13 +9,13 @@
 
 namespace EnOcean {
 
-EnOceanBLEScannerSubscriber::EnOceanBLEScannerSubscriber() {
+BLEScannerSubscriber::BLEScannerSubscriber() {
 }
 
-EnOceanBLEScannerSubscriber::~EnOceanBLEScannerSubscriber() {
+BLEScannerSubscriber::~BLEScannerSubscriber() {
 }
 
-void EnOceanBLEScannerSubscriber::onResult(NimBLEAdvertisedDevice* advertisedDevice) {
+void BLEScannerSubscriber::onResult(NimBLEAdvertisedDevice* advertisedDevice) {
   Payload payload = getPayload(advertisedDevice);
 
   if (payload.deviceType == DeviceType::UNKNOWN) {
@@ -38,7 +38,7 @@ void EnOceanBLEScannerSubscriber::onResult(NimBLEAdvertisedDevice* advertisedDev
   }
 }
 
-Payload EnOceanBLEScannerSubscriber::getPayload(NimBLEAdvertisedDevice* advertisedDevice) {
+Payload BLEScannerSubscriber::getPayload(NimBLEAdvertisedDevice* advertisedDevice) {
   Payload payload;
   memset(&payload, 0x00, sizeof(payload));
 
@@ -67,7 +67,7 @@ Payload EnOceanBLEScannerSubscriber::getPayload(NimBLEAdvertisedDevice* advertis
   return payload;
 }
 
-bool EnOceanBLEScannerSubscriber::securityKeyValid(Device& device, Payload& payload) {
+bool BLEScannerSubscriber::securityKeyValid(Device& device, Payload& payload) {
   unsigned char nonce[13] {0};
   uint8_t a0Flag          = 0x01;
   uint8_t b0Flag          = 0x49;
@@ -177,7 +177,7 @@ bool EnOceanBLEScannerSubscriber::securityKeyValid(Device& device, Payload& payl
   }
 }
 
-void EnOceanBLEScannerSubscriber::handleDataPayload(NimBLEAddress& bleAddress, Payload& payload) {
+void BLEScannerSubscriber::handleDataPayload(NimBLEAddress& bleAddress, Payload& payload) {
   if (activeCommissioningAddress == bleAddress) {
     // Data event received from active commissioning address -> end commissioning mode
     activeCommissioningAddress = NimBLEAddress("");
@@ -210,7 +210,7 @@ void EnOceanBLEScannerSubscriber::handleDataPayload(NimBLEAddress& bleAddress, P
   }
 }
 
-void EnOceanBLEScannerSubscriber::handleCommissioningPayload(NimBLEAddress& bleAddress, Payload& payload) {
+void BLEScannerSubscriber::handleCommissioningPayload(NimBLEAddress& bleAddress, Payload& payload) {
   ptm215Adapter.cancelRepeat();
   if (!commissioningEventhandler) {
     log_w("No commissioning handler");
@@ -246,13 +246,13 @@ void EnOceanBLEScannerSubscriber::handleCommissioningPayload(NimBLEAddress& bleA
   commissioningEventhandler->handleEvent(event);
 }
 
-Device EnOceanBLEScannerSubscriber::registerDevice(const std::string bleAddress, const std::string securityKey) {
+Device BLEScannerSubscriber::registerDevice(const std::string bleAddress, const std::string securityKey) {
   byte key[16];
   hexStringToByteArray(securityKey, key, sizeof(SecurityKey));
   return registerDevice(bleAddress, key);
 }
 
-Device EnOceanBLEScannerSubscriber::registerDevice(const std::string bleAddress, const SecurityKey securityKey) {
+Device BLEScannerSubscriber::registerDevice(const std::string bleAddress, const SecurityKey securityKey) {
   log_d("Registering address %s", bleAddress.c_str());
   Device device;
   memcpy(device.securityKey, securityKey, sizeof(SecurityKey));
@@ -263,35 +263,35 @@ Device EnOceanBLEScannerSubscriber::registerDevice(const std::string bleAddress,
   return device;
 }
 
-void EnOceanBLEScannerSubscriber::registerPTM215Device(const std::string bleAddress, const std::string securityKey, const uint8_t eventHandlerNodeId,
+void BLEScannerSubscriber::registerPTM215Device(const std::string bleAddress, const std::string securityKey, const uint8_t eventHandlerNodeId,
     bool buttonA0, bool buttonA1, bool buttonB0, bool buttonB1, const uint8_t refId) {
   Device device = registerDevice(bleAddress, securityKey);
   ptm215Adapter.registerHandler(device, eventHandlerNodeId, buttonA0, buttonA1, buttonB0, buttonB1, refId);
 }
 
-void EnOceanBLEScannerSubscriber::registerPTM215Device(const std::string bleAddress, const std::string securityKey, PTM215EventHandler* handler,
+void BLEScannerSubscriber::registerPTM215Device(const std::string bleAddress, const std::string securityKey, PTM215EventHandler* handler,
     bool buttonA0, bool buttonA1, bool buttonB0, bool buttonB1, const uint8_t refId) {
   Device device = registerDevice(bleAddress, securityKey);
   ptm215Adapter.registerHandler(device, handler, buttonA0, buttonA1, buttonB0, buttonB1, refId);
 }
 
-void EnOceanBLEScannerSubscriber::registerPTM215Device(const std::string bleAddress, const SecurityKey securityKey, PTM215EventHandler* handler,
+void BLEScannerSubscriber::registerPTM215Device(const std::string bleAddress, const SecurityKey securityKey, PTM215EventHandler* handler,
     bool buttonA0, bool buttonA1, bool buttonB0, bool buttonB1, const uint8_t refId) {
   Device device = registerDevice(bleAddress, securityKey);
   ptm215Adapter.registerHandler(device, handler, buttonA0, buttonA1, buttonB0, buttonB1, refId);
 }
 
-void EnOceanBLEScannerSubscriber::registerDataDevice(const std::string bleAddress, const std::string securityKey, DataEventHandler* handler) {
+void BLEScannerSubscriber::registerDataDevice(const std::string bleAddress, const std::string securityKey, DataEventHandler* handler) {
   Device device = registerDevice(bleAddress, securityKey);
   dataAdapter.registerHandler(device, handler);
 }
 
 
-void EnOceanBLEScannerSubscriber::unRegisterAddress(const NimBLEAddress address) {
+void BLEScannerSubscriber::unRegisterAddress(const NimBLEAddress address) {
   devices.erase(address);
 }
 
-DeviceType EnOceanBLEScannerSubscriber::getTypeFromAddress(const NimBLEAddress& address) {
+DeviceType BLEScannerSubscriber::getTypeFromAddress(const NimBLEAddress& address) {
   const uint8_t* nativeAddressLSB = address.getNative(); // LSB
   uint8_t nativeAddress[6];
   std::reverse_copy(nativeAddressLSB, nativeAddressLSB + 6, nativeAddress);

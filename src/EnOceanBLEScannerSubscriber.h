@@ -3,8 +3,8 @@
 #include "Arduino.h"
 #include "EnOceanConstants.h"
 #include "EnOceanDataTypes.h"
-#include "PTM215/EnOceanPTM215EventAdapter.h"
-#include "MultiData/EnOceanDataEventAdapter.h"
+#include "PTM215/PTM215EventAdapter.h"
+#include "MultiData/DataEventAdapter.h"
 #include "NimBLEDevice.h"
 #include "BleInterfaces.h"
 #include <map>
@@ -28,10 +28,10 @@ namespace EnOcean {
  * Before calling initialize() to create and start the tasks, the global
  * BLEDevice must have been initialized with BLEDevice::init()
  */
-class EnOceanBLEScannerSubscriber : public BLEScannerSubscriber {
+class BLEScannerSubscriber : public BLEScannerSubscriber {
   public:
-    EnOceanBLEScannerSubscriber();
-    virtual ~EnOceanBLEScannerSubscriber();
+    BLEScannerSubscriber();
+    virtual ~BLEScannerSubscriber();
 
     void setCommissioningEventHandler(CommissioningEventhandler* handler) {
       commissioningEventhandler = handler;

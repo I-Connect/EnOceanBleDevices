@@ -1,6 +1,6 @@
 #pragma once
 #include "../EnOceanDataTypes.h"
-#include "EnOceanDataEventhandler.h"
+#include "DataEventhandler.h"
 #include "bitset"
 #include "vector"
 
@@ -8,7 +8,7 @@
 namespace EnOcean {
 
 /**
- * @brief EventAdapter handling payloads received by EnOceanBLEScannerSubscriber with multiple data points like from EMDCB and STM550
+ * @brief EventAdapter handling payloads received by BLEScannerSubscriber with multiple data points like from EMDCB and STM550
  *
  */
 class DataEventAdapter {
