@@ -19,7 +19,7 @@ char* printBuffer(const byte* buff, const uint8_t size, const boolean asChars, c
     output[0] = 0x00;
     return output;
   }
-  
+
   char temp[strlen(header) + 2 + size * 3 + 1] { 0 };
   if (strlen(header) > 0) {
     strcat(temp, header);

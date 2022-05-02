@@ -8,7 +8,7 @@
 namespace EnOcean {
 
 /**
- * @brief EventAdapter handling payloads received by BLEScanner with multiple data points like from EMDCB and STM550
+ * @brief EventAdapter handling payloads received by EnOceanBLEScannerSubscriber with multiple data points like from EMDCB and STM550
  * 
  */
 class DataEventAdapter {
