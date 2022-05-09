@@ -1,6 +1,7 @@
 #pragma once
 #include "Arduino.h"
 #include "NimBLEAddress.h"
+#include <map>
 
 namespace EnOcean {
 
@@ -57,6 +58,18 @@ enum class ParameterType : byte {
   MagnetContact   = 0x23
 };
 
+const std::map<ParameterType, uint8_t> resolution {
+  {ParameterType::Temperature, 100},
+  {ParameterType::BatteryVoltage, 2},
+  {ParameterType::EnergyLevel, 2},
+  {ParameterType::LightLevelSolar, 1},
+  {ParameterType::LightLevel, 1},
+  {ParameterType::Humidity, 2},
+  {ParameterType::Acceleration, 1},
+  {ParameterType::Occupancy, 1},
+  {ParameterType::MagnetContact, 1},
+};
+
 // TODO Handle custom length parameters
 struct Parameter {
   ParameterType type;
@@ -67,7 +80,7 @@ struct Parameter {
     uint8_t uint8;
   } value{0x00};
 
-  int getValueAsInt() {
+  int getRawValueAsInt() {
     if (size == 1) {
       return value.uint8;
     } else if (size == 2) {
@@ -76,6 +89,11 @@ struct Parameter {
       return value.uint32;
     }
   }
+
+  int getValueAsInt() {
+    return round((float)getRawValueAsInt() / resolution.at(type));
+  }
+
 };
 
 enum class AccelerometerStatus {

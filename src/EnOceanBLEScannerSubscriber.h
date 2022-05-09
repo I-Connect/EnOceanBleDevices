@@ -37,9 +37,6 @@ class BLEScannerSubscriber : public BleScanner::Subscriber {
       commissioningEventhandler = handler;
     }
 
-    Device registerDevice(const std::string bleAddress, const std::string securityKey);
-    Device registerDevice(const std::string bleAddress, const SecurityKey securityKey);
-
     /**
      * @brief Register an EnOcean PTM215 device (Switches)
      *
@@ -87,6 +84,10 @@ class BLEScannerSubscriber : public BleScanner::Subscriber {
      * @brief Map of registered devices by BleAddress
      */
     std::map<NimBLEAddress, Device> devices;
+    Device registerDevice(const std::string bleAddress, const std::string securityKey);
+    Device registerDevice(const std::string bleAddress, const SecurityKey securityKey);
+
+
 
     /**
      * @brief Implementation of BLEAdvertisedDeviceCallbacks to handle advertisement events. Checks
