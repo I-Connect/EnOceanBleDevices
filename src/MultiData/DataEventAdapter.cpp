@@ -8,18 +8,19 @@ namespace EnOcean {
 DataEventAdapter::~DataEventAdapter() {
 }
 
-void DataEventAdapter::registerHandler(Device& device, const uint8_t nodeId) {
+void DataEventAdapter::registerHandler(Device& device, const uint8_t nodeId, const uint8_t refId) {
   if (dataEventHandlerMap.count(nodeId)) {
-    registerHandler(device, dataEventHandlerMap[nodeId]);
+    registerHandler(device, dataEventHandlerMap[nodeId], refId);
   } else {
     log_e("NodeId [%d] not found in DataEventHandlerMap", nodeId);
   }
 }
 
-void DataEventAdapter::registerHandler(Device& device, DataEventHandler* handler) {
+void DataEventAdapter::registerHandler(Device& device, DataEventHandler* handler, const uint8_t refId) {
   HandlerRegistration reg;
   reg.address = device.address;
   reg.handler = handler;
+  reg.referenceId = refId;
   handlers.push_back(reg);
 }
 
@@ -31,6 +32,7 @@ void DataEventAdapter::handlePayload(Device& device, Payload& payload) {
 void DataEventAdapter::callEventHandlers(DataEvent& event) {
   for (auto const& reg : handlers) {
     if (reg.address == event.device->address) {
+      event.referenceId = reg.referenceId;
       reg.handler->handleEvent(event);
     }
   }

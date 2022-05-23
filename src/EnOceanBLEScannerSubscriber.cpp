@@ -281,9 +281,9 @@ void BLEScannerSubscriber::registerPTM215Device(const std::string bleAddress, co
   ptm215Adapter.registerHandler(device, handler, buttonA0, buttonA1, buttonB0, buttonB1, refId);
 }
 
-void BLEScannerSubscriber::registerDataDevice(const std::string bleAddress, const std::string securityKey, DataEventHandler* handler) {
+void BLEScannerSubscriber::registerDataDevice(const std::string bleAddress, const std::string securityKey, DataEventHandler* handler, const uint8_t refId) {
   Device device = registerDevice(bleAddress, securityKey);
-  dataAdapter.registerHandler(device, handler);
+  dataAdapter.registerHandler(device, handler, refId);
 }
 
 

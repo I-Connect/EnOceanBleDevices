@@ -19,7 +19,7 @@ class PTMHandler : public EnOcean::PTM215EventHandler {
     PTMHandler(const uint8_t id) : EnOcean::PTM215EventHandler(id) {};
     virtual ~PTMHandler() {};
 
-    void handleEvent(EnOcean::PTM215Event& event) override {
+    void handleEvent(const EnOcean::PTM215Event& event) override {
       log_i("Handling PTM Event by node %d", getId());
       log_i("DeviceAddress: %s", event.device->address.toString().c_str());
       log_i("Event: ReferenceId: %d button %d type %d", event.referenceId, event.button, event.eventType);
@@ -31,7 +31,7 @@ class EMDCBHandler : public EnOcean::DataEventHandler {
     EMDCBHandler(const uint8_t id) : EnOcean::DataEventHandler(id) {};
     virtual ~EMDCBHandler() {};
 
-    void handleEvent(EnOcean::DataEvent& event) override {
+    void handleEvent(const EnOcean::DataEvent& event) override {
       log_i("Handling EMDCB Event by node %d", getId());
       log_i("DeviceAddress: %s", event.device->address.toString().c_str());
       log_i("Parameters:");
@@ -49,7 +49,7 @@ class STM550Handler : public EnOcean::DataEventHandler {
     STM550Handler(const uint8_t id) : EnOcean::DataEventHandler(id) {};
     virtual ~STM550Handler() {};
 
-    void handleEvent(EnOcean::DataEvent& event) override {
+    void handleEvent(const EnOcean::DataEvent& event) override {
       log_i("Handling STM550B Event by node %d", getId());
       log_i("DeviceAddress: %s", event.device->address.toString().c_str());
       log_i("Parameters:");

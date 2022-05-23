@@ -50,7 +50,7 @@ class PTM215EventHandler {
       return nodeId;
     };
 
-    virtual void handleEvent(PTM215Event& event) = 0;
+    virtual void handleEvent(const PTM215Event& event) = 0;
 
   private:
     const uint8_t nodeId;

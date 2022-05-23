@@ -10,6 +10,7 @@ namespace EnOcean {
 struct DataEvent {
   std::vector<Parameter> parameters;
   Device* device;
+  uint8_t referenceId = 0;
 };
 
 /**
@@ -30,7 +31,7 @@ class DataEventHandler {
       return nodeId;
     };
 
-    virtual void handleEvent(DataEvent& event) = 0;
+    virtual void handleEvent(const DataEvent& event) = 0;
 
   private:
     const uint8_t nodeId;

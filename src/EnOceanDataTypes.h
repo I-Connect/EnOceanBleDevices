@@ -80,7 +80,7 @@ struct Parameter {
     uint8_t uint8;
   } value{0x00};
 
-  int getRawValueAsInt() {
+  int getRawValueAsInt() const {
     if (size == 1) {
       return value.uint8;
     } else if (size == 2) {
@@ -90,7 +90,7 @@ struct Parameter {
     }
   }
 
-  int getValueAsInt() {
+  int getValueAsInt() const {
     return round((float)getRawValueAsInt() / resolution.at(type));
   }
 
