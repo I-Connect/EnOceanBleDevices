@@ -15,15 +15,14 @@ class DataEventAdapter {
   public:
     ~DataEventAdapter();
 
-    void registerHandler(Device& device, DataEventHandler* hander, const uint8_t refId);
-    void registerHandler(Device& device, const uint8_t nodeId, const uint8_t refId);
+    void registerHandler(Device& device, DataEventHandler* hander);
+    void registerHandler(Device& device, const uint8_t nodeId);
     void handlePayload(Device& device, Payload& payload);
 
   private:
     struct HandlerRegistration {
       NimBLEAddress address;
       DataEventHandler* handler;
-      uint8_t referenceId;
     };
     std::vector<HandlerRegistration> handlers;
 

@@ -60,7 +60,7 @@ class BLEScannerSubscriber : public BleScanner::Subscriber {
      * @param securityKey Security key retrieved from QR code, NFC or commissioning data
      * @param handler PayloadHandler that will be called on receipt of an event on the bleAddress
      */
-    void registerDataDevice(const std::string bleAddress, const std::string securityKey, DataEventHandler* handler, const uint8_t refId = 0);
+    void registerDataDevice(const std::string bleAddress, const std::string securityKey, DataEventHandler* handler);
 
     void unRegisterAddress(const NimBLEAddress address);
 

@@ -10,7 +10,6 @@ namespace EnOcean {
 struct DataEvent {
   std::vector<Parameter> parameters;
   Device* device;
-  uint8_t referenceId = 0;
 };
 
 /**
