@@ -45,6 +45,15 @@ void PTM215EventAdapter::registerHandler(Device& device, PTM215EventHandler* han
   handlers.push_back(reg);
 }
 
+PTM215EventAdapter::HandlerRegistration PTM215EventAdapter::getHandlerRegistration(const Device& device) const {
+  for (auto& reg : handlers) {
+    if (reg.address == device.address) {
+      return reg;
+    }
+  }
+  return PTM215EventAdapter::HandlerRegistration{};
+}
+
 void PTM215EventAdapter::handlePayload(Device& device, Payload& payload) {
   PTM215Event ptm215Event = mapToPTM215Event(device, payload);
   manageEventList(ptm215Event);

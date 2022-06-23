@@ -68,6 +68,10 @@ class BLEScannerSubscriber : public BleScanner::Subscriber {
     // public for testing
     bool securityKeyValid(Device& device, Payload& payload);
 
+    void forEachRegisteredDevice(std::function<void(const Device&)>) const;
+    uint8_t getHandlerId(const Device& device) const;
+    PTM215EventAdapter::HandlerRegistration getPTMHandlerRegistration(const Device&) const;
+
   private:
     CommissioningEventhandler* commissioningEventhandler = nullptr;
     uint32_t lastCommissioningCounter                    = 0;
@@ -124,7 +128,7 @@ class BLEScannerSubscriber : public BleScanner::Subscriber {
      */
     void handleCommissioningPayload(NimBLEAddress& bleAddress, Payload& payload);
 
-    DeviceType getTypeFromAddress(const NimBLEAddress& address);
+    DeviceType getTypeFromAddress(const NimBLEAddress& address) const;
 };
 
 } // namespace EnOcean

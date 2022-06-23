@@ -23,6 +23,15 @@ void DataEventAdapter::registerHandler(Device& device, DataEventHandler* handler
   handlers.push_back(reg);
 }
 
+DataEventHandler* DataEventAdapter::getEventHandler(const Device& device) const {
+  for (auto const& reg : handlers) {
+    if (reg.address == device.address) {
+      return reg.handler;
+    }
+  }
+  return nullptr;
+}
+
 void DataEventAdapter::handlePayload(Device& device, Payload& payload) {
   DataEvent event = mapToDataEvent(device, payload);
   callEventHandlers(event);

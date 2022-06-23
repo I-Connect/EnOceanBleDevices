@@ -295,7 +295,7 @@ void BLEScannerSubscriber::unRegisterAddress(const NimBLEAddress address) {
   devices.erase(address);
 }
 
-DeviceType BLEScannerSubscriber::getTypeFromAddress(const NimBLEAddress& address) {
+DeviceType BLEScannerSubscriber::getTypeFromAddress(const NimBLEAddress& address) const {
   const uint8_t* nativeAddressLSB = address.getNative(); // LSB
   uint8_t nativeAddress[6];
   std::reverse_copy(nativeAddressLSB, nativeAddressLSB + 6, nativeAddress);
@@ -318,6 +318,45 @@ DeviceType BLEScannerSubscriber::getTypeFromAddress(const NimBLEAddress& address
     }
   }
   return DeviceType::UNKNOWN;
+}
+
+void BLEScannerSubscriber::forEachRegisteredDevice(std::function<void(const Device&)> callback) const {
+  for (auto const& device : devices) {
+    callback(device.second);
+  }
+}
+
+uint8_t BLEScannerSubscriber::getHandlerId(const Device& device) const {
+
+  switch (device.type) {
+    case DeviceType::PTM215B: {
+      PTM215EventAdapter::HandlerRegistration reg = getPTMHandlerRegistration(device);
+      if (reg.handler) {
+        return reg.handler->getId();
+      }
+      return 0;
+    }
+
+    case DeviceType::EMDCB:
+    case DeviceType::STM550B: {
+      DataEventHandler* handler = dataAdapter.getEventHandler(device);
+      if (handler) {
+        return handler->getId();
+      } else {
+        return 0;
+      }
+
+    }
+
+    default: {
+      return 0;
+    }
+  }
+
+}
+
+PTM215EventAdapter::HandlerRegistration BLEScannerSubscriber::getPTMHandlerRegistration(const Device& device) const {
+  return ptm215Adapter.getHandlerRegistration(device);
 }
 
 } // namespace EnOcean
