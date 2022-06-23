@@ -286,6 +286,10 @@ void BLEScannerSubscriber::registerDataDevice(const std::string bleAddress, cons
   dataAdapter.registerHandler(device, handler);
 }
 
+void BLEScannerSubscriber::registerDataDevice(const std::string bleAddress, const std::string securityKey, const uint8_t handlerId) {
+  Device device = registerDevice(bleAddress, securityKey);
+  dataAdapter.registerHandler(device, handlerId);
+}
 
 void BLEScannerSubscriber::unRegisterAddress(const NimBLEAddress address) {
   devices.erase(address);

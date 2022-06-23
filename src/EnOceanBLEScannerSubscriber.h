@@ -61,6 +61,7 @@ class BLEScannerSubscriber : public BleScanner::Subscriber {
      * @param handler PayloadHandler that will be called on receipt of an event on the bleAddress
      */
     void registerDataDevice(const std::string bleAddress, const std::string securityKey, DataEventHandler* handler);
+    void registerDataDevice(const std::string bleAddress, const std::string securityKey, const uint8_t handlerId);
 
     void unRegisterAddress(const NimBLEAddress address);
 
