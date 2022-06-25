@@ -8,6 +8,17 @@ void hexStringToByteArray(std::string stringInput, byte* output, uint8_t byteLen
   }
 }
 
+std::string byteArrayToHexString(const byte* bytes, const uint8_t bytelength) {
+  std::string result;
+
+  for (auto i = 0; i < bytelength; i++) {
+    char b[3] {0};
+    sprintf(b, "%02x", bytes[i]);
+    result += b;
+  }
+  return result;
+}
+
 void printBuffer(const byte* buff, const uint8_t size, const boolean asChars, const char* header) {
   char b[strlen(header) + 2 + size * 3 + 1] { 0 };
   Serial.println(printBuffer(buff, size, asChars, header, b));
