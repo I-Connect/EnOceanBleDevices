@@ -291,8 +291,16 @@ void BLEScannerSubscriber::registerDataDevice(const std::string bleAddress, cons
   dataAdapter.registerHandler(device, handlerId);
 }
 
-void BLEScannerSubscriber::unRegisterAddress(const NimBLEAddress address) {
+void BLEScannerSubscriber::unRegisterAddress(const NimBLEAddress& address) {
   devices.erase(address);
+  dataAdapter.unregisterDevice(address);
+  ptm215Adapter.unregisterDevice(address);
+}
+
+void BLEScannerSubscriber::unRegisterAll() {
+  for (auto const& device : devices) {
+    unRegisterAddress(device.first);
+  }
 }
 
 DeviceType BLEScannerSubscriber::getTypeFromAddress(const NimBLEAddress& address) const {

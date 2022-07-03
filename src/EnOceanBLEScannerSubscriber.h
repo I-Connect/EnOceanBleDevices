@@ -63,7 +63,8 @@ class BLEScannerSubscriber : public BleScanner::Subscriber {
     void registerDataDevice(const std::string bleAddress, const std::string securityKey, DataEventHandler* handler);
     void registerDataDevice(const std::string bleAddress, const std::string securityKey, const uint8_t handlerId);
 
-    void unRegisterAddress(const NimBLEAddress address);
+    void unRegisterAddress(const NimBLEAddress& address);
+    void unRegisterAll();
 
     // public for testing
     bool securityKeyValid(Device& device, Payload& payload);

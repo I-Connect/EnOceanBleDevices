@@ -17,6 +17,7 @@ class DataEventAdapter {
 
     void registerHandler(Device& device, DataEventHandler* hander);
     void registerHandler(Device& device, const uint8_t nodeId);
+    void unregisterDevice(const NimBLEAddress& address);
     void handlePayload(Device& device, Payload& payload);
     DataEventHandler* getEventHandler(const Device& device) const;
 

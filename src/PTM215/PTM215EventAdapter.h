@@ -25,6 +25,7 @@ class PTM215EventAdapter {
 
     void registerHandler(Device& device, PTM215EventHandler* hander, bool buttonA0, bool buttonA1, bool buttonB0, bool buttonB1, const uint8_t refId = 0);
     void registerHandler(Device& device, const uint8_t nodeId, bool buttonA0, bool buttonA1, bool buttonB0, bool buttonB1, const uint8_t refId = 0);
+    void unregisterDevice(const NimBLEAddress& address);
     HandlerRegistration getHandlerRegistration(const Device&) const;
 
     void handlePayload(Device& device, Payload& payload);
