@@ -12,6 +12,14 @@
 
 namespace EnOcean {
 
+class RegisterNotificationHandler {
+  public:
+    virtual ~RegisterNotificationHandler() = default;
+
+    virtual void enOceanDeviceRegistered(const NimBLEAddress& bleAddress) = 0;
+    virtual void enOceanDeviceRemoved(const NimBLEAddress& bleAddress) = 0;
+};
+
 /**
  * @brief Class handling BLE advertisement messages received from multiple
  * EnOcean devices
@@ -35,6 +43,10 @@ class BLEScannerSubscriber : public BleScanner::Subscriber {
 
     void setCommissioningEventHandler(CommissioningEventhandler* handler) {
       commissioningEventhandler = handler;
+    }
+
+    void setRegisterNotificationHandler(RegisterNotificationHandler* handler) {
+      registerNotificationHandler = handler;
     }
 
     /**
@@ -75,6 +87,8 @@ class BLEScannerSubscriber : public BleScanner::Subscriber {
 
   private:
     CommissioningEventhandler* commissioningEventhandler = nullptr;
+    RegisterNotificationHandler* registerNotificationHandler = nullptr;
+
     uint32_t lastCommissioningCounter                    = 0;
     /**
      * @brief Address of currently active commissioning event

@@ -260,6 +260,11 @@ Device BLEScannerSubscriber::registerDevice(const std::string bleAddress, const 
   device.address   = address;
   device.type      = getTypeFromAddress(address);
   devices[address] = device;
+
+  if (registerNotificationHandler) {
+    registerNotificationHandler->enOceanDeviceRegistered(address);
+  }
+
   return device;
 }
 
@@ -293,8 +298,21 @@ void BLEScannerSubscriber::registerDataDevice(const std::string bleAddress, cons
 
 void BLEScannerSubscriber::unRegisterAddress(const NimBLEAddress& address) {
   devices.erase(address);
-  dataAdapter.unregisterDevice(address);
-  ptm215Adapter.unregisterDevice(address);
+  switch (getTypeFromAddress(address)) {
+    case DeviceType::STM550B:
+    case DeviceType::EMDCB: {
+      dataAdapter.unregisterDevice(address);
+      break;
+    }
+    case DeviceType::PTM215B: {
+      ptm215Adapter.unregisterDevice(address);
+      break;
+    }
+  }
+
+  if (registerNotificationHandler) {
+    registerNotificationHandler->enOceanDeviceRemoved(address);
+  }
 }
 
 void BLEScannerSubscriber::unRegisterAll() {
