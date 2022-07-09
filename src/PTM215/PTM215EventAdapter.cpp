@@ -46,9 +46,12 @@ void PTM215EventAdapter::registerHandler(Device& device, PTM215EventHandler* han
 }
 
 void PTM215EventAdapter::unregisterDevice(const NimBLEAddress& address) {
+  handlers.erase(
   remove_if(handlers.begin(), handlers.end(), [address](HandlerRegistration & registration) {
     return registration.address == address;
-  });
+  }),
+  handlers.end()
+  );
 }
 
 PTM215EventAdapter::HandlerRegistration PTM215EventAdapter::getHandlerRegistration(const Device& device) const {

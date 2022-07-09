@@ -260,11 +260,6 @@ Device BLEScannerSubscriber::registerDevice(const std::string bleAddress, const 
   device.address   = address;
   device.type      = getTypeFromAddress(address);
   devices[address] = device;
-
-  if (registerNotificationHandler) {
-    registerNotificationHandler->enOceanDeviceRegistered(address);
-  }
-
   return device;
 }
 
@@ -272,28 +267,48 @@ void BLEScannerSubscriber::registerPTM215Device(const std::string bleAddress, co
     bool buttonA0, bool buttonA1, bool buttonB0, bool buttonB1, const uint8_t refId) {
   Device device = registerDevice(bleAddress, securityKey);
   ptm215Adapter.registerHandler(device, eventHandlerNodeId, buttonA0, buttonA1, buttonB0, buttonB1, refId);
+
+  if (registerNotificationHandler) {
+    registerNotificationHandler->enOceanDeviceRegistered(bleAddress);
+  }
 }
 
 void BLEScannerSubscriber::registerPTM215Device(const std::string bleAddress, const std::string securityKey, PTM215EventHandler* handler,
     bool buttonA0, bool buttonA1, bool buttonB0, bool buttonB1, const uint8_t refId) {
   Device device = registerDevice(bleAddress, securityKey);
   ptm215Adapter.registerHandler(device, handler, buttonA0, buttonA1, buttonB0, buttonB1, refId);
+
+  if (registerNotificationHandler) {
+    registerNotificationHandler->enOceanDeviceRegistered(bleAddress);
+  }
 }
 
 void BLEScannerSubscriber::registerPTM215Device(const std::string bleAddress, const SecurityKey securityKey, PTM215EventHandler* handler,
     bool buttonA0, bool buttonA1, bool buttonB0, bool buttonB1, const uint8_t refId) {
   Device device = registerDevice(bleAddress, securityKey);
   ptm215Adapter.registerHandler(device, handler, buttonA0, buttonA1, buttonB0, buttonB1, refId);
+
+  if (registerNotificationHandler) {
+    registerNotificationHandler->enOceanDeviceRegistered(bleAddress);
+  }
 }
 
 void BLEScannerSubscriber::registerDataDevice(const std::string bleAddress, const std::string securityKey, DataEventHandler* handler) {
   Device device = registerDevice(bleAddress, securityKey);
   dataAdapter.registerHandler(device, handler);
+
+  if (registerNotificationHandler) {
+    registerNotificationHandler->enOceanDeviceRegistered(bleAddress);
+  }
 }
 
 void BLEScannerSubscriber::registerDataDevice(const std::string bleAddress, const std::string securityKey, const uint8_t handlerId) {
   Device device = registerDevice(bleAddress, securityKey);
   dataAdapter.registerHandler(device, handlerId);
+
+  if (registerNotificationHandler) {
+    registerNotificationHandler->enOceanDeviceRegistered(bleAddress);
+  }
 }
 
 void BLEScannerSubscriber::unRegisterAddress(const NimBLEAddress& address) {

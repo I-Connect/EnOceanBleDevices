@@ -26,7 +26,7 @@ void DataEventAdapter::registerHandler(Device& device, DataEventHandler* handler
 void DataEventAdapter::unregisterDevice(const NimBLEAddress& address) {
   handlers.erase(remove_if(handlers.begin(), handlers.end(), [address](HandlerRegistration & registration) {
     return registration.address == address;
-  }));
+  }), handlers.end());
 }
 
 DataEventHandler* DataEventAdapter::getEventHandler(const Device& device) const {
