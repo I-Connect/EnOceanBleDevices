@@ -4,7 +4,7 @@ namespace EnOcean {
 
 PTM215EventHandlerMap ptm215EventHandlerMap;
 
-PTM215EventHandler::PTM215EventHandler(const uint8_t nodeId) : nodeId(nodeId) {
+PTM215EventHandler::PTM215EventHandler(const nodeId_t nodeId) : nodeId(nodeId) {
   ptm215EventHandlerMap[nodeId] = this;
 }
 

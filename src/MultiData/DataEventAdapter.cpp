@@ -8,7 +8,7 @@ namespace EnOcean {
 DataEventAdapter::~DataEventAdapter() {
 }
 
-void DataEventAdapter::registerHandler(Device& device, const uint8_t nodeId) {
+void DataEventAdapter::registerHandler(Device& device, const nodeId_t nodeId) {
   if (dataEventHandlerMap.count(nodeId)) {
     registerHandler(device, dataEventHandlerMap[nodeId]);
   } else {

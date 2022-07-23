@@ -5,6 +5,12 @@
 
 namespace EnOcean {
 
+#ifdef NODE_ID_TYPE
+  typedef NODE_ID_TYPE nodeId_t;
+#else
+  typedef uint8_t nodeId_t;
+#endif
+
 enum class PayloadType {
   Data,
   Commissioning

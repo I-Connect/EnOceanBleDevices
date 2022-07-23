@@ -43,20 +43,20 @@ struct PTM215Event {
  */
 class PTM215EventHandler {
   public:
-    PTM215EventHandler(const uint8_t nodeId);
+    PTM215EventHandler(const nodeId_t nodeId);
     virtual ~PTM215EventHandler();
 
-    const uint8_t getId() const {
+    const nodeId_t getId() const {
       return nodeId;
     };
 
     virtual void handleEvent(const PTM215Event& event) = 0;
 
   private:
-    const uint8_t nodeId;
+    const nodeId_t nodeId;
 };
 
-typedef std::map<uint8_t, PTM215EventHandler*> PTM215EventHandlerMap;
+typedef std::map<nodeId_t, PTM215EventHandler*> PTM215EventHandlerMap;
 extern PTM215EventHandlerMap ptm215EventHandlerMap;
 
 } // namespace EnOcean

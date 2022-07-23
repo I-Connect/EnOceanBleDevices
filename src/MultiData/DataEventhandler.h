@@ -23,20 +23,20 @@ struct DataEvent {
  */
 class DataEventHandler {
   public:
-    DataEventHandler(const uint8_t nodeId);
+    DataEventHandler(const nodeId_t nodeId);
     virtual ~DataEventHandler();
 
-    const uint8_t getId() const {
+    const nodeId_t getId() const {
       return nodeId;
     };
 
     virtual void handleEvent(const DataEvent& event) = 0;
 
   private:
-    const uint8_t nodeId;
+    const nodeId_t nodeId;
 };
 
-typedef std::map<uint8_t, DataEventHandler*> DataEventHandlerMap;
+typedef std::map<nodeId_t, DataEventHandler*> DataEventHandlerMap;
 extern DataEventHandlerMap dataEventHandlerMap;
 
 } // namespace EnOcean

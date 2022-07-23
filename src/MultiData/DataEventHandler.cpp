@@ -4,7 +4,7 @@ namespace EnOcean {
 
 DataEventHandlerMap dataEventHandlerMap;
 
-DataEventHandler::DataEventHandler(const uint8_t nodeId) : nodeId(nodeId) {
+DataEventHandler::DataEventHandler(const nodeId_t nodeId) : nodeId(nodeId) {
   dataEventHandlerMap[nodeId] = this;
 }
 

@@ -25,7 +25,7 @@ PTM215EventAdapter::~PTM215EventAdapter() {
   }
 }
 
-void PTM215EventAdapter::registerHandler(Device& device, const uint8_t handlerNodeId, bool buttonA0, bool buttonA1, bool buttonB0, bool buttonB1, const uint8_t refId) {
+void PTM215EventAdapter::registerHandler(Device& device, const nodeId_t handlerNodeId, bool buttonA0, bool buttonA1, bool buttonB0, bool buttonB1, const nodeId_t refId) {
   if (ptm215EventHandlerMap.count(handlerNodeId)) {
     registerHandler(device, ptm215EventHandlerMap[handlerNodeId], buttonA0, buttonA1, buttonB0, buttonB1, refId);
   } else {
@@ -33,7 +33,7 @@ void PTM215EventAdapter::registerHandler(Device& device, const uint8_t handlerNo
   }
 }
 
-void PTM215EventAdapter::registerHandler(Device& device, PTM215EventHandler* handler, bool buttonA0, bool buttonA1, bool buttonB0, bool buttonB1, const uint8_t refId) {
+void PTM215EventAdapter::registerHandler(Device& device, PTM215EventHandler* handler, bool buttonA0, bool buttonA1, bool buttonB0, bool buttonB1, const nodeId_t refId) {
   HandlerRegistration reg;
   reg.address    = device.address;
   reg.handler    = handler;
