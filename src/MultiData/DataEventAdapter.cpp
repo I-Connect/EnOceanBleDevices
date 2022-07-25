@@ -12,7 +12,7 @@ void DataEventAdapter::registerHandler(Device& device, const nodeId_t nodeId) {
   if (dataEventHandlerMap.count(nodeId)) {
     registerHandler(device, dataEventHandlerMap[nodeId]);
   } else {
-    log_e("NodeId [%d] not found in DataEventHandlerMap", nodeId);
+    log_e("NodeId [%u] not found in DataEventHandlerMap", nodeId);
   }
 }
 

@@ -263,8 +263,8 @@ Device BLEScannerSubscriber::registerDevice(const std::string bleAddress, const 
   return device;
 }
 
-void BLEScannerSubscriber::registerPTM215Device(const std::string bleAddress, const std::string securityKey, const uint8_t eventHandlerNodeId,
-    bool buttonA0, bool buttonA1, bool buttonB0, bool buttonB1, const uint8_t refId) {
+void BLEScannerSubscriber::registerPTM215Device(const std::string bleAddress, const std::string securityKey, const nodeId_t eventHandlerNodeId,
+    bool buttonA0, bool buttonA1, bool buttonB0, bool buttonB1, const nodeId_t refId) {
   Device device = registerDevice(bleAddress, securityKey);
   ptm215Adapter.registerHandler(device, eventHandlerNodeId, buttonA0, buttonA1, buttonB0, buttonB1, refId);
 
@@ -274,7 +274,7 @@ void BLEScannerSubscriber::registerPTM215Device(const std::string bleAddress, co
 }
 
 void BLEScannerSubscriber::registerPTM215Device(const std::string bleAddress, const std::string securityKey, PTM215EventHandler* handler,
-    bool buttonA0, bool buttonA1, bool buttonB0, bool buttonB1, const uint8_t refId) {
+    bool buttonA0, bool buttonA1, bool buttonB0, bool buttonB1, const nodeId_t refId) {
   Device device = registerDevice(bleAddress, securityKey);
   ptm215Adapter.registerHandler(device, handler, buttonA0, buttonA1, buttonB0, buttonB1, refId);
 
@@ -284,7 +284,7 @@ void BLEScannerSubscriber::registerPTM215Device(const std::string bleAddress, co
 }
 
 void BLEScannerSubscriber::registerPTM215Device(const std::string bleAddress, const SecurityKey securityKey, PTM215EventHandler* handler,
-    bool buttonA0, bool buttonA1, bool buttonB0, bool buttonB1, const uint8_t refId) {
+    bool buttonA0, bool buttonA1, bool buttonB0, bool buttonB1, const nodeId_t refId) {
   Device device = registerDevice(bleAddress, securityKey);
   ptm215Adapter.registerHandler(device, handler, buttonA0, buttonA1, buttonB0, buttonB1, refId);
 
@@ -302,7 +302,7 @@ void BLEScannerSubscriber::registerDataDevice(const std::string bleAddress, cons
   }
 }
 
-void BLEScannerSubscriber::registerDataDevice(const std::string bleAddress, const std::string securityKey, const uint8_t handlerId) {
+void BLEScannerSubscriber::registerDataDevice(const std::string bleAddress, const std::string securityKey, const nodeId_t handlerId) {
   Device device = registerDevice(bleAddress, securityKey);
   dataAdapter.registerHandler(device, handlerId);
 
