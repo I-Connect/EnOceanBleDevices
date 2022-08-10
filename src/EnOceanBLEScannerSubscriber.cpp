@@ -371,10 +371,7 @@ uint8_t BLEScannerSubscriber::getHandlerId(const Device& device) const {
 
   switch (device.type) {
     case DeviceType::PTM215B: {
-      PTM215EventAdapter::HandlerRegistration reg = getPTMHandlerRegistration(device);
-      if (reg.handler) {
-        return reg.handler->getId();
-      }
+      log_w("Cannot determine PTM215 handlerId on address alone");
       return 0;
     }
 
@@ -396,8 +393,8 @@ uint8_t BLEScannerSubscriber::getHandlerId(const Device& device) const {
 
 }
 
-PTM215EventAdapter::HandlerRegistration BLEScannerSubscriber::getPTMHandlerRegistration(const Device& device) const {
-  return ptm215Adapter.getHandlerRegistration(device);
+std::vector<PTM215EventAdapter::HandlerRegistration> BLEScannerSubscriber::getPTMHandlerRegistrations(const Device& device) const {
+  return ptm215Adapter.getHandlerRegistrations(device);
 }
 
 } // namespace EnOcean

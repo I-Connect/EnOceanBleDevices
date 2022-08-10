@@ -83,7 +83,7 @@ class BLEScannerSubscriber : public BleScanner::Subscriber {
 
     void forEachRegisteredDevice(std::function<void(const Device&)>) const;
     uint8_t getHandlerId(const Device& device) const;
-    PTM215EventAdapter::HandlerRegistration getPTMHandlerRegistration(const Device&) const;
+    std::vector<PTM215EventAdapter::HandlerRegistration> getPTMHandlerRegistrations(const Device&) const;
 
   private:
     CommissioningEventhandler* commissioningEventhandler = nullptr;

@@ -54,13 +54,14 @@ void PTM215EventAdapter::unregisterDevice(const NimBLEAddress& address) {
   );
 }
 
-PTM215EventAdapter::HandlerRegistration PTM215EventAdapter::getHandlerRegistration(const Device& device) const {
+std::vector<PTM215EventAdapter::HandlerRegistration> PTM215EventAdapter::getHandlerRegistrations(const Device& device) const {
+  std::vector<PTM215EventAdapter::HandlerRegistration> result;
   for (auto& reg : handlers) {
     if (reg.address == device.address) {
-      return reg;
+      result.push_back(reg);
     }
   }
-  return PTM215EventAdapter::HandlerRegistration{};
+  return result;
 }
 
 void PTM215EventAdapter::handlePayload(Device& device, Payload& payload) {
