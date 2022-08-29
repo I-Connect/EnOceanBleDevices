@@ -66,8 +66,8 @@ std::vector<PTM215EventAdapter::HandlerRegistration> PTM215EventAdapter::getHand
 
 void PTM215EventAdapter::handlePayload(Device& device, Payload& payload) {
   PTM215Event ptm215Event = mapToPTM215Event(device, payload);
-  manageEventList(ptm215Event);
   callEventHandlers(ptm215Event);
+  manageEventList(ptm215Event);
 }
 
 void PTM215EventAdapter::callEventHandlers(PTM215Event& event) {
@@ -160,12 +160,17 @@ PTM215Event PTM215EventAdapter::mapToPTM215Event(Device& device, Payload& payloa
 }
 
 void PTM215EventAdapter::generateRepeatEvents() {
+  uint32_t latestStart = 0;
   for (auto& pair : lastEvents) {
     PTM215Event event = pair.second;
+    latestStart = max(latestStart, event.pushStartTime);
     if (millis() - INITIAL_REPEAT_WAIT > event.pushStartTime) {
       pair.second.eventType = EventType::Repeat;
       callEventHandlers(pair.second);
     }
+  }
+  if (millis() - latestStart > 30 * REPEAT_INTERVAL) {
+    cancelRepeat();
   }
 }
 

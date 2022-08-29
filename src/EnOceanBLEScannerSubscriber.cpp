@@ -253,7 +253,6 @@ Device BLEScannerSubscriber::registerDevice(const std::string bleAddress, const 
 }
 
 Device BLEScannerSubscriber::registerDevice(const std::string bleAddress, const SecurityKey securityKey) {
-  log_d("Registering address %s", bleAddress.c_str());
   Device device;
   memcpy(device.securityKey, securityKey, sizeof(SecurityKey));
   NimBLEAddress address{bleAddress};
