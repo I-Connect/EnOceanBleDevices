@@ -1,0 +1,31 @@
+@startuml EnOcean class diagram
+!theme bluegray
+
+title EnOcean class diagram
+
+class BLEScanner
+interface BleScanner::Subscriber {
+  onResult()
+}
+
+class EnOceanBLEScannerSubscriber implements BleScanner::Subscriber {
+  onResult()
+}
+struct Device
+struct HandlerRegistraton
+abstract class DataEventHandler {
+  handleEvent()
+}
+HandlerRegistraton *-up-> Device
+class DataEventAdapter {
+  handlePayload()
+}
+HandlerRegistraton o--> DataEventHandler
+
+BLEScanner *- EnOceanBLEScannerSubscriber
+EnOceanBLEScannerSubscriber "1" o--right--> "many" Device
+EnOceanBLEScannerSubscriber o--> DataEventAdapter
+
+DataEventAdapter "1" *--right-> "many" HandlerRegistraton
+
+@enduml

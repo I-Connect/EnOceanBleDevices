@@ -1,0 +1,31 @@
+@startuml EnOcean event handling
+hide footbox
+!theme bluegray
+
+title EnOcean event handling
+
+actor EnOceanDevice
+participant BLEScanner
+participant "EnoceanScannerSubscriber" as Subscriber
+participant DataEventAdapter
+participant "DataEventHandler::csEnoceanDataEventHandler" as DataEventHandler
+actor Observers
+
+EnOceanDevice->BLEScanner++:advertisement
+loop all registered Subscribers
+  BLEScanner->Subscriber++:onResult()
+  note right of Subscriber:Check if device is registered
+    Subscriber->DataEventAdapter++:handlePayLoad()
+
+      loop all registered handlers for device
+        DataEventAdapter->DataEventHandler++:handleEvent()
+        note right of DataEventHandler:Store latest \nparameter values
+        DataEventHandler->Observers:notification()
+        return
+      end
+    return
+end
+return
+
+
+@enduml
