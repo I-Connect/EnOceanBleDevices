@@ -7,7 +7,7 @@
     {
       "name": "Jeroen van de Vorst",
       "maintainer": true,
-      "url": "I-Connect.online"
+      "url": "https://I-Connect.online"
     },
     {
       "name": "Bas Schouten"
@@ -44,7 +44,7 @@
       ]
     },
     {
-      "name": "Multiple Devices PTM215 EMDCB, STM550",
+      "name": "MultipleDevices",
       "base": "examples",
       "files": [
         "testSignatureAndEvents.h"
