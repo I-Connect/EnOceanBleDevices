@@ -1,8 +1,8 @@
 {
-  "version": "3.0.0",
+  "version": "3.0.1",
   "name": "EnOceanBleDevices",
   "description": "Implementation of EnOcean Selfpowered BLE devices",
-  "keywords": "Enocean PTM215b PTM535BZ EMDCB STM550B esp32 BLE",
+  "keywords": "EnOcean PTM215b PTM535BZ EMDCB STM550B esp32 BLE",
   "authors": [
     {
       "name": "Jeroen van de Vorst",
@@ -32,6 +32,23 @@
     {
       "name": "BleScanner",
       "version": "https://github.com/I-Connect/BleScanner"
+    }
+  ],
+  "examples": [
+    {
+      "name": "MultiplePTM215",
+      "base": "examples",
+      "files": [
+        "platformio.ini",
+        "handleEventsMultiplePTM215.h"
+      ]
+    },
+    {
+      "name": "Multiple Devices PTM215 EMDCB, STM550",
+      "base": "examples",
+      "files": [
+        "testSignatureAndEvents.h"
+      ]
     }
   ]
 }
