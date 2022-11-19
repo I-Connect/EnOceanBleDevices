@@ -50,20 +50,22 @@ Payload BLEScannerSubscriber::getPayload(NimBLEAdvertisedDevice* advertisedDevic
   nextPayload = nextPayload + 8;
 
   payload.deviceType = getTypeFromAddress(advertisedDevice->getAddress());
+
   if (payload.deviceType == DeviceType::UNKNOWN) {
     // Return incomplete payload, should be handled in caller
     return payload;
   }
 
-  if (payload.len == 29) {
+  if (payload.deviceType == DeviceType::PTM215B && payload.len == 29) {
     payload.payloadType = PayloadType::Commissioning;
     memcpy(&payload.commissioning, nextPayload, payload.len - 7);
-  } else {
-    uint8_t dataLen     = payload.len - 11;
-    payload.payloadType = PayloadType::Data;
-    memcpy(&payload.data.raw, nextPayload, dataLen);
-    memcpy(&payload.data.signature, nextPayload + dataLen, 4);
+    return payload;
   }
+  // TODO Implement commissioning for STM and EMDCB types, is part of payload data, with specific type id (0x3E)
+  uint8_t dataLen     = payload.len - 11;
+  payload.payloadType = PayloadType::Data;
+  memcpy(&payload.data.raw, nextPayload, dataLen);
+  memcpy(&payload.data.signature, nextPayload + dataLen, 4);
   return payload;
 }
 
