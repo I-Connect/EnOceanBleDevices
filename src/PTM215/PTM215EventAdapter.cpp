@@ -108,6 +108,9 @@ void PTM215EventAdapter::startRepeatTask() {
   if (isRepeatTaskSuspended()) {
     vTaskResume(repeatEventsTaskHandle);
     esp_task_wdt_add(repeatEventsTaskHandle);
+    #ifdef DEBUG_ENOCEAN
+    log_d("TASK: PTM215b repeatEvents task resumed on core: %d", xPortGetCoreID());
+    #endif
   }
 }
 
@@ -116,6 +119,9 @@ void PTM215EventAdapter::suspendRepeatTask() {
     esp_task_wdt_delete(repeatEventsTaskHandle);
     vTaskSuspend(repeatEventsTaskHandle);
   }
+  #ifdef DEBUG_ENOCEAN
+  log_d("TASK: PTM215b repeatEvents task suspended");
+  #endif
 }
 
 bool PTM215EventAdapter::isRepeatTaskSuspended() {
