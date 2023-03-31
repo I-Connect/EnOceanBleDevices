@@ -64,6 +64,8 @@ enum class ParameterType : byte {
   MagnetContact   = 0x23
 };
 
+ParameterType parameterTypeFromString(const std::string);
+
 const std::map<ParameterType, uint8_t> resolution {
   {ParameterType::Temperature, 100},
   {ParameterType::BatteryVoltage, 2},
