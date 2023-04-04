@@ -264,30 +264,27 @@ Device BLEScannerSubscriber::registerDevice(const std::string bleAddress, const 
   return device;
 }
 
-void BLEScannerSubscriber::registerPTM215Device(const std::string bleAddress, const std::string securityKey, const nodeId_t eventHandlerNodeId,
-    bool buttonA0, bool buttonA1, bool buttonB0, bool buttonB1, const nodeId_t refId) {
+void BLEScannerSubscriber::registerPTM215Device(const std::string bleAddress, const std::string securityKey, PTM215EventHandler* handler) {
   Device device = registerDevice(bleAddress, securityKey);
-  ptm215Adapter.registerHandler(device, eventHandlerNodeId, buttonA0, buttonA1, buttonB0, buttonB1, refId);
+  ptm215Adapter.registerHandler(device, handler);
 
   if (registerNotificationHandler) {
     registerNotificationHandler->enOceanDeviceRegistered(bleAddress);
   }
 }
 
-void BLEScannerSubscriber::registerPTM215Device(const std::string bleAddress, const std::string securityKey, PTM215EventHandler* handler,
-    bool buttonA0, bool buttonA1, bool buttonB0, bool buttonB1, const nodeId_t refId) {
+void BLEScannerSubscriber::registerPTM215Device(const std::string bleAddress, const std::string securityKey, const nodeId_t eventHandlerNodeId) {
   Device device = registerDevice(bleAddress, securityKey);
-  ptm215Adapter.registerHandler(device, handler, buttonA0, buttonA1, buttonB0, buttonB1, refId);
+  ptm215Adapter.registerHandler(device, eventHandlerNodeId);
 
   if (registerNotificationHandler) {
     registerNotificationHandler->enOceanDeviceRegistered(bleAddress);
   }
 }
 
-void BLEScannerSubscriber::registerPTM215Device(const std::string bleAddress, const SecurityKey securityKey, PTM215EventHandler* handler,
-    bool buttonA0, bool buttonA1, bool buttonB0, bool buttonB1, const nodeId_t refId) {
+void BLEScannerSubscriber::registerPTM215Device(const std::string bleAddress, const SecurityKey securityKey, PTM215EventHandler* handler) {
   Device device = registerDevice(bleAddress, securityKey);
-  ptm215Adapter.registerHandler(device, handler, buttonA0, buttonA1, buttonB0, buttonB1, refId);
+  ptm215Adapter.registerHandler(device, handler);
 
   if (registerNotificationHandler) {
     registerNotificationHandler->enOceanDeviceRegistered(bleAddress);
@@ -392,10 +389,6 @@ uint8_t BLEScannerSubscriber::getHandlerId(const Device& device) const {
     }
   }
 
-}
-
-std::vector<PTM215EventAdapter::HandlerRegistration> BLEScannerSubscriber::getPTMHandlerRegistrations(const Device& device) const {
-  return ptm215Adapter.getHandlerRegistrations(device);
 }
 
 } // namespace EnOcean

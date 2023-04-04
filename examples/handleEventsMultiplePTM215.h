@@ -25,7 +25,7 @@ class PTMHandler : public EnOcean::PTM215EventHandler {
     void handleEvent(const EnOcean::PTM215Event& event) override {
       log_i("Handling PTM Event by handler-node %d", getId());
       log_i("DeviceAddress: %s", event.device->address.toString().c_str());
-      log_i("Event: ReferenceId: %d button %d type %d", event.referenceId, event.button, event.eventType);
+      log_i("Event: button %d type %d", event.button, event.eventType);
     }
 };
 
@@ -52,9 +52,9 @@ void setup() {
 
   log_d("Adding devices");
   // register handler for A0 and B0 buttons using pointer to handler
-  scannerSubscriber.registerPTM215Device(PTM_BLE_ADDRESS1, PTM_SECURITY_KEY2, ptmHandler, true, false, true, false, PTM_DEVICE_REFERENCE_ID1);
+  scannerSubscriber.registerPTM215Device(PTM_BLE_ADDRESS1, PTM_SECURITY_KEY2, ptmHandler);
   // register handler for A1, B0 and B1 buttons, using nodeId of handler
-  scannerSubscriber.registerPTM215Device(PTM_BLE_ADDRESS2, PTM_SECURITY_KEY2, PTMHANDLER_NODE_ID, false, true, true, true, PTM_DEVICE_REFERENCE_ID2);
+  scannerSubscriber.registerPTM215Device(PTM_BLE_ADDRESS2, PTM_SECURITY_KEY2, PTMHANDLER_NODE_ID);
 
   log_i("Initialization done");
   log_i("===========================================");

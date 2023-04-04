@@ -55,15 +55,10 @@ class BLEScannerSubscriber : public BleScanner::Subscriber {
      * @param bleAddress BLE address of switch being handled
      * @param securityKey Security key retrieved from QR code, NFC or commissioning data
      * @param handler PayloadHandler that will be called on receipt of an event on the bleAddress
-     * @param referenceId Optional nodeId_t id that can be used by the handler
-     * @param buttonXX booleans indicating which of the buttons A0, A1, B0 and B1 will be handled by this handler
      */
-    void registerPTM215Device(const std::string bleAddress, const std::string securityKey, PTM215EventHandler* handler,
-                              bool buttonA0, bool buttonA1, bool buttonB0, bool buttonB1, const nodeId_t refId = 0);
-    void registerPTM215Device(const std::string bleAddress, const std::string securityKey, const nodeId_t eventHandlerNodeId,
-                              bool buttonA0, bool buttonA1, bool buttonB0, bool buttonB1, const nodeId_t refId = 0);
-    void registerPTM215Device(const std::string bleAddress, const SecurityKey securityKey, PTM215EventHandler* handler,
-                              bool buttonA0, bool buttonA1, bool buttonB0, bool buttonB1, const nodeId_t refId = 0);
+    void registerPTM215Device(const std::string bleAddress, const std::string securityKey, PTM215EventHandler* handler);
+    void registerPTM215Device(const std::string bleAddress, const std::string securityKey, const nodeId_t eventHandlerNodeId);
+    void registerPTM215Device(const std::string bleAddress, const SecurityKey securityKey, PTM215EventHandler* handler);
 
     /**
      * @brief Register an EnOcean EMDCB device (motion detector)
@@ -83,7 +78,6 @@ class BLEScannerSubscriber : public BleScanner::Subscriber {
 
     void forEachRegisteredDevice(std::function<void(const Device&)>) const;
     uint8_t getHandlerId(const Device& device) const;
-    std::vector<PTM215EventAdapter::HandlerRegistration> getPTMHandlerRegistrations(const Device&) const;
 
   private:
     CommissioningEventhandler* commissioningEventhandler = nullptr;
@@ -106,8 +100,6 @@ class BLEScannerSubscriber : public BleScanner::Subscriber {
     std::map<NimBLEAddress, Device> devices;
     Device registerDevice(const std::string bleAddress, const std::string securityKey);
     Device registerDevice(const std::string bleAddress, const SecurityKey securityKey);
-
-
 
     /**
      * @brief Implementation of BLEAdvertisedDeviceCallbacks to handle advertisement events. Checks

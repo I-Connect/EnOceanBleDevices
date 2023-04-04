@@ -19,14 +19,11 @@ class PTM215EventAdapter {
     struct HandlerRegistration {
       NimBLEAddress address = NimBLEAddress();
       PTM215EventHandler* handler = nullptr;
-      nodeId_t referenceId = 0;
-      std::bitset<4> buttons; // A0, A1, B0, B1
     };
 
-    void registerHandler(Device& device, PTM215EventHandler* hander, bool buttonA0, bool buttonA1, bool buttonB0, bool buttonB1, const nodeId_t refId = 0);
-    void registerHandler(Device& device, const nodeId_t nodeId, bool buttonA0, bool buttonA1, bool buttonB0, bool buttonB1, const nodeId_t refId = 0);
+    void registerHandler(Device& device, PTM215EventHandler* hander);
+    void registerHandler(Device& device, const nodeId_t nodeId);
     void unregisterDevice(const NimBLEAddress& address);
-    std::vector<HandlerRegistration> getHandlerRegistrations(const Device&) const;
 
     void handlePayload(Device& device, Payload& payload);
 

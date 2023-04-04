@@ -29,7 +29,6 @@ struct PTM215Event {
   EventType eventType;
   uint32_t pushStartTime = 0;
   Device* device;
-  nodeId_t referenceId = 0;
 };
 
 /**

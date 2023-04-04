@@ -25,23 +25,18 @@ PTM215EventAdapter::~PTM215EventAdapter() {
   }
 }
 
-void PTM215EventAdapter::registerHandler(Device& device, const nodeId_t handlerNodeId, bool buttonA0, bool buttonA1, bool buttonB0, bool buttonB1, const nodeId_t refId) {
+void PTM215EventAdapter::registerHandler(Device& device, const nodeId_t handlerNodeId) {
   if (ptm215EventHandlerMap.count(handlerNodeId)) {
-    registerHandler(device, ptm215EventHandlerMap[handlerNodeId], buttonA0, buttonA1, buttonB0, buttonB1, refId);
+    registerHandler(device, ptm215EventHandlerMap[handlerNodeId]);
   } else {
     log_e("NodeId [%d] not found in ptm215EventHandlerMap", handlerNodeId);
   }
 }
 
-void PTM215EventAdapter::registerHandler(Device& device, PTM215EventHandler* handler, bool buttonA0, bool buttonA1, bool buttonB0, bool buttonB1, const nodeId_t refId) {
+void PTM215EventAdapter::registerHandler(Device& device, PTM215EventHandler* handler) {
   HandlerRegistration reg;
   reg.address    = device.address;
   reg.handler    = handler;
-  reg.referenceId = refId;
-  reg.buttons[0] = buttonA0;
-  reg.buttons[1] = buttonA1;
-  reg.buttons[2] = buttonB0;
-  reg.buttons[3] = buttonB1;
   handlers.push_back(reg);
 }
 
@@ -54,16 +49,6 @@ void PTM215EventAdapter::unregisterDevice(const NimBLEAddress& address) {
   );
 }
 
-std::vector<PTM215EventAdapter::HandlerRegistration> PTM215EventAdapter::getHandlerRegistrations(const Device& device) const {
-  std::vector<PTM215EventAdapter::HandlerRegistration> result;
-  for (auto& reg : handlers) {
-    if (reg.address == device.address) {
-      result.push_back(reg);
-    }
-  }
-  return result;
-}
-
 void PTM215EventAdapter::handlePayload(Device& device, Payload& payload) {
   PTM215Event ptm215Event = mapToPTM215Event(device, payload);
   callEventHandlers(ptm215Event);
@@ -72,9 +57,8 @@ void PTM215EventAdapter::handlePayload(Device& device, Payload& payload) {
 
 void PTM215EventAdapter::callEventHandlers(PTM215Event& event) {
   for (auto const& reg : handlers) {
-    if ((reg.address == event.device->address) && reg.buttons[(uint8_t)event.button]) {
+    if (reg.address == event.device->address) {
       PTM215Event evt = event; // Make copy to avoid modifications on parameter
-      evt.referenceId = reg.referenceId;
       reg.handler->handleEvent(evt);
     }
   }
