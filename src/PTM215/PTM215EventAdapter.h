@@ -7,7 +7,6 @@
 
 namespace EnOcean {
 
-// TODO Make configurable
 #define INITIAL_REPEAT_WAIT 1000
 #define REPEAT_INTERVAL 250
 
