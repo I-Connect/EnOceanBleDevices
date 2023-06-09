@@ -3,6 +3,22 @@
 
 namespace EnOcean {
 
+std::string deviceTypeToString(const DeviceType type) {
+  switch (type) {
+    case EnOcean::DeviceType::PTM215B: {
+      return "ptm215b";
+    }
+    case EnOcean::DeviceType::EMDCB: {
+      return "emdcb";
+    }
+
+    case EnOcean::DeviceType::STM550B: {
+      return "stm550b";
+    }
+  }
+  return "";
+}
+
 ParameterType parameterTypeFromString(const std::string str) {
   if (str == "Temperature") {
     return ParameterType::Temperature ;

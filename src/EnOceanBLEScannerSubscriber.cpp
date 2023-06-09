@@ -365,12 +365,16 @@ void BLEScannerSubscriber::forEachRegisteredDevice(std::function<void(const Devi
   }
 }
 
-uint8_t BLEScannerSubscriber::getHandlerId(const Device& device) const {
+nodeId_t BLEScannerSubscriber::getHandlerId(const Device& device) const {
 
   switch (device.type) {
     case DeviceType::PTM215B: {
-      log_w("Cannot determine PTM215 handlerId on address alone");
-      return 0;
+      PTM215EventHandler* handler = ptm215Adapter.getEventHandler(device);
+      if (handler) {
+        return handler->getId();
+      } else {
+        return 0;
+      }
     }
 
     case DeviceType::EMDCB:

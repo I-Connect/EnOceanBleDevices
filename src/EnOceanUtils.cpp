@@ -19,13 +19,13 @@ std::string byteArrayToHexString(const byte* bytes, const uint8_t bytelength) {
   return result;
 }
 
-void printBuffer(const byte* buff, const uint8_t size, const boolean asChars, const char* header) {
+void printBuffer(const byte* buff, const size_t size, const boolean asChars, const char* header) {
   char b[strlen(header) + 2 + size * 3 + 1] { 0 };
   Serial.println(printBuffer(buff, size, asChars, header, b));
   delay(5);
 }
 
-char* printBuffer(const byte* buff, const uint8_t size, const boolean asChars, const char* header, char* output) {
+char* printBuffer(const byte* buff, const size_t size, const boolean asChars, const char* header, char* output) {
   if (size == 0) {
     output[0] = 0x00;
     return output;

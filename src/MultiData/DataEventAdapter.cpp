@@ -60,7 +60,7 @@ DataEvent DataEventAdapter::mapToDataEvent(Device& device, Payload& payload) {
   return event;
 }
 
-void DataEventAdapter::parsePayloadParameters(byte* payload, const uint8_t size, std::vector<Parameter>& result) {
+void DataEventAdapter::parsePayloadParameters(byte* payload, const size_t size, std::vector<Parameter>& result) {
   byte* payloadPtr = payload;
 
   while (payloadPtr < payload + size) {

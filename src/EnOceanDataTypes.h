@@ -24,6 +24,8 @@ enum class DeviceType {
   STM550B   // Multi sensor
 };
 
+std::string deviceTypeToString(const DeviceType);
+
 typedef byte SecurityKey[16];
 
 struct Payload {

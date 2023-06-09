@@ -29,7 +29,7 @@ class DataEventAdapter {
     std::vector<HandlerRegistration> handlers;
 
     DataEvent mapToDataEvent(Device& device, Payload& payload);
-    void parsePayloadParameters(byte* payload, const uint8_t size, std::vector<Parameter>& result);
+    void parsePayloadParameters(byte* payload, const size_t size, std::vector<Parameter>& result);
     void callEventHandlers(DataEvent& event);
 };
 

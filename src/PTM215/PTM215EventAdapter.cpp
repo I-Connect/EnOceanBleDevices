@@ -25,6 +25,15 @@ PTM215EventAdapter::~PTM215EventAdapter() {
   }
 }
 
+PTM215EventHandler* PTM215EventAdapter::getEventHandler(const Device& device) const {
+  for (auto const& reg : handlers) {
+    if (reg.address == device.address) {
+      return reg.handler;
+    }
+  }
+  return nullptr;
+}
+
 void PTM215EventAdapter::registerHandler(Device& device, const nodeId_t handlerNodeId) {
   if (ptm215EventHandlerMap.count(handlerNodeId)) {
     registerHandler(device, ptm215EventHandlerMap[handlerNodeId]);

@@ -23,9 +23,9 @@ class PTM215EventAdapter {
     void registerHandler(Device& device, PTM215EventHandler* hander);
     void registerHandler(Device& device, const nodeId_t nodeId);
     void unregisterDevice(const NimBLEAddress& address);
-
     void handlePayload(Device& device, Payload& payload);
-
+    PTM215EventHandler* getEventHandler(const Device& device) const;
+    
     /**
      * @brief Method used by repeatEventstask to generate a repeat event every XXX ms
      *

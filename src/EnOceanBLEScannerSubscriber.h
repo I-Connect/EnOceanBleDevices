@@ -77,7 +77,7 @@ class BLEScannerSubscriber : public BleScanner::Subscriber {
     bool securityKeyValid(Device& device, Payload& payload);
 
     void forEachRegisteredDevice(std::function<void(const Device&)>) const;
-    uint8_t getHandlerId(const Device& device) const;
+    nodeId_t getHandlerId(const Device& device) const;
 
   private:
     CommissioningEventhandler* commissioningEventhandler = nullptr;
