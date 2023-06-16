@@ -155,6 +155,10 @@ PTM215Event PTM215EventAdapter::mapToPTM215Event(Device& device, Payload& payloa
     event.pushStartTime = millis();
   }
 
+  #ifdef DEBUG_ENOCEAN
+  log_d("PTM215 event: Type: %d, button: %d, device: %s", event.eventType, event.button, event.device->address.toString().c_str());
+  #endif
+
   return event;
 }
 
