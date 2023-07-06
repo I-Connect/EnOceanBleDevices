@@ -87,7 +87,7 @@ void PTM215EventAdapter::manageEventList(PTM215Event& event) {
   }
 
   if (lastEvents.size() > 0) {
-    startRepeatTask();
+    // startRepeatTask();
   } else {
     suspendRepeatTask();
   }
@@ -145,11 +145,11 @@ PTM215Event PTM215EventAdapter::mapToPTM215Event(Device& device, Payload& payloa
   event.button = button;
 
   if ((switchStatus & 0x01) == 0) { // release
-    if ((lastEvents.count(device.address) == 0) || (millis() - INITIAL_REPEAT_WAIT < lastEvents[device.address].pushStartTime)) {
-      event.eventType = EventType::ReleaseShort;
-    } else {
-      event.eventType = EventType::ReleaseLong;
-    }
+    // if ((lastEvents.count(device.address) == 0) || (millis() - INITIAL_REPEAT_WAIT < lastEvents[device.address].pushStartTime)) {
+    event.eventType = EventType::ReleaseShort;
+    // } else {
+    //   event.eventType = EventType::ReleaseLong;
+    // }
   } else { // push
     event.eventType     = EventType::Pushed;
     event.pushStartTime = millis();
