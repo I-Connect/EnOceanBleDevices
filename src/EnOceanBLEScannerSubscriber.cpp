@@ -248,13 +248,13 @@ void BLEScannerSubscriber::handleCommissioningPayload(NimBLEAddress& bleAddress,
   commissioningEventhandler->handleEvent(event);
 }
 
-Device BLEScannerSubscriber::registerDevice(const std::string bleAddress, const std::string securityKey) {
+Device BLEScannerSubscriber::registerDevice(const std::string& bleAddress, std::string_view securityKey) {
   byte key[16];
   hexStringToByteArray(securityKey, key, sizeof(SecurityKey));
   return registerDevice(bleAddress, key);
 }
 
-Device BLEScannerSubscriber::registerDevice(const std::string bleAddress, const SecurityKey securityKey) {
+Device BLEScannerSubscriber::registerDevice(const std::string& bleAddress, const SecurityKey securityKey) {
   Device device;
   memcpy(device.securityKey, securityKey, sizeof(SecurityKey));
   NimBLEAddress address{bleAddress};
@@ -264,7 +264,7 @@ Device BLEScannerSubscriber::registerDevice(const std::string bleAddress, const 
   return device;
 }
 
-void BLEScannerSubscriber::registerPTM215Device(const std::string bleAddress, const std::string securityKey, PTM215EventHandler* handler) {
+void BLEScannerSubscriber::registerPTM215Device(const std::string& bleAddress, std::string_view securityKey, PTM215EventHandler* handler) {
   Device device = registerDevice(bleAddress, securityKey);
   ptm215Adapter.registerHandler(device, handler);
 
@@ -273,7 +273,7 @@ void BLEScannerSubscriber::registerPTM215Device(const std::string bleAddress, co
   }
 }
 
-void BLEScannerSubscriber::registerPTM215Device(const std::string bleAddress, const std::string securityKey, const nodeId_t eventHandlerNodeId) {
+void BLEScannerSubscriber::registerPTM215Device(const std::string& bleAddress, std::string_view securityKey, const nodeId_t eventHandlerNodeId) {
   Device device = registerDevice(bleAddress, securityKey);
   ptm215Adapter.registerHandler(device, eventHandlerNodeId);
 
@@ -282,7 +282,7 @@ void BLEScannerSubscriber::registerPTM215Device(const std::string bleAddress, co
   }
 }
 
-void BLEScannerSubscriber::registerPTM215Device(const std::string bleAddress, const SecurityKey securityKey, PTM215EventHandler* handler) {
+void BLEScannerSubscriber::registerPTM215Device(const std::string& bleAddress, const SecurityKey securityKey, PTM215EventHandler* handler) {
   Device device = registerDevice(bleAddress, securityKey);
   ptm215Adapter.registerHandler(device, handler);
 
@@ -291,7 +291,7 @@ void BLEScannerSubscriber::registerPTM215Device(const std::string bleAddress, co
   }
 }
 
-void BLEScannerSubscriber::registerDataDevice(const std::string bleAddress, const std::string securityKey, DataEventHandler* handler) {
+void BLEScannerSubscriber::registerDataDevice(const std::string& bleAddress, std::string_view securityKey, DataEventHandler* handler) {
   Device device = registerDevice(bleAddress, securityKey);
   dataAdapter.registerHandler(device, handler);
 
@@ -300,7 +300,7 @@ void BLEScannerSubscriber::registerDataDevice(const std::string bleAddress, cons
   }
 }
 
-void BLEScannerSubscriber::registerDataDevice(const std::string bleAddress, const std::string securityKey, const nodeId_t handlerId) {
+void BLEScannerSubscriber::registerDataDevice(const std::string& bleAddress, std::string_view securityKey, const nodeId_t handlerId) {
   Device device = registerDevice(bleAddress, securityKey);
   dataAdapter.registerHandler(device, handlerId);
 

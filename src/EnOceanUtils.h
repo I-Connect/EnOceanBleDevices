@@ -5,8 +5,7 @@
 
 namespace EnOcean {
 
-
-void hexStringToByteArray(std::string stringInput, byte* output, uint8_t byteLength);
+void hexStringToByteArray(std::string_view stringInput, byte* output, uint8_t byteLength);
 std::string byteArrayToHexString(const byte* bytes, const uint8_t bytelength);
 
 void printBuffer(const byte* buff, const size_t size, const boolean asChars, const char* header);

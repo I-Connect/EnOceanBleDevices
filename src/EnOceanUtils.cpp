@@ -2,9 +2,9 @@
 
 namespace EnOcean {
 
-void hexStringToByteArray(std::string stringInput, byte* output, uint8_t byteLength) {
+void hexStringToByteArray(std::string_view stringInput, byte* output, uint8_t byteLength) {
   for (uint8_t i = 0; i < byteLength; i++) {
-    output[i] = strtol(stringInput.substr(i * 2, 2).c_str(), NULL, 16);
+    output[i] = strtol(stringInput.substr(i * 2, 2).data(), NULL, 16);
   }
 }
 

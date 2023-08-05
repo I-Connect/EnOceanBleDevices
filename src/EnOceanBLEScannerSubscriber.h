@@ -56,9 +56,9 @@ class BLEScannerSubscriber : public BleScanner::Subscriber {
      * @param securityKey Security key retrieved from QR code, NFC or commissioning data
      * @param handler PayloadHandler that will be called on receipt of an event on the bleAddress
      */
-    void registerPTM215Device(const std::string bleAddress, const std::string securityKey, PTM215EventHandler* handler);
-    void registerPTM215Device(const std::string bleAddress, const std::string securityKey, const nodeId_t eventHandlerNodeId);
-    void registerPTM215Device(const std::string bleAddress, const SecurityKey securityKey, PTM215EventHandler* handler);
+    void registerPTM215Device(const std::string& bleAddress, std::string_view securityKey, PTM215EventHandler* handler);
+    void registerPTM215Device(const std::string& bleAddress, std::string_view securityKey, const nodeId_t eventHandlerNodeId);
+    void registerPTM215Device(const std::string& bleAddress, const SecurityKey securityKey, PTM215EventHandler* handler);
 
     /**
      * @brief Register an EnOcean EMDCB device (motion detector)
@@ -67,8 +67,8 @@ class BLEScannerSubscriber : public BleScanner::Subscriber {
      * @param securityKey Security key retrieved from QR code, NFC or commissioning data
      * @param handler PayloadHandler that will be called on receipt of an event on the bleAddress
      */
-    void registerDataDevice(const std::string bleAddress, const std::string securityKey, DataEventHandler* handler);
-    void registerDataDevice(const std::string bleAddress, const std::string securityKey, const nodeId_t handlerId);
+    void registerDataDevice(const std::string& bleAddress, std::string_view securityKey, DataEventHandler* handler);
+    void registerDataDevice(const std::string& bleAddress, std::string_view securityKey, const nodeId_t handlerId);
 
     void unRegisterAddress(const NimBLEAddress& address);
     void unRegisterAll();
@@ -98,8 +98,8 @@ class BLEScannerSubscriber : public BleScanner::Subscriber {
      * @brief Map of registered devices by BleAddress
      */
     std::map<NimBLEAddress, Device> devices;
-    Device registerDevice(const std::string bleAddress, const std::string securityKey);
-    Device registerDevice(const std::string bleAddress, const SecurityKey securityKey);
+    Device registerDevice(const std::string& bleAddress, std::string_view securityKey);
+    Device registerDevice(const std::string& bleAddress, const SecurityKey securityKey);
 
     /**
      * @brief Implementation of BLEAdvertisedDeviceCallbacks to handle advertisement events. Checks
