@@ -248,64 +248,64 @@ void BLEScannerSubscriber::handleCommissioningPayload(NimBLEAddress& bleAddress,
   commissioningEventhandler->handleEvent(event);
 }
 
-Device BLEScannerSubscriber::registerDevice(const std::string& bleAddress, std::string_view securityKey) {
+Device BLEScannerSubscriber::registerDevice(std::string_view bleAddress, std::string_view securityKey) {
   byte key[16];
   hexStringToByteArray(securityKey, key, sizeof(SecurityKey));
   return registerDevice(bleAddress, key);
 }
 
-Device BLEScannerSubscriber::registerDevice(const std::string& bleAddress, const SecurityKey securityKey) {
+Device BLEScannerSubscriber::registerDevice(std::string_view bleAddress, const SecurityKey securityKey) {
   Device device;
   memcpy(device.securityKey, securityKey, sizeof(SecurityKey));
-  NimBLEAddress address{bleAddress};
+  NimBLEAddress address{std::string(bleAddress)};
   device.address   = address;
   device.type      = getTypeFromAddress(address);
   devices[address] = device;
   return device;
 }
 
-void BLEScannerSubscriber::registerPTM215Device(const std::string& bleAddress, std::string_view securityKey, PTM215EventHandler* handler) {
+void BLEScannerSubscriber::registerPTM215Device(std::string_view bleAddress, std::string_view securityKey, PTM215EventHandler* handler) {
   Device device = registerDevice(bleAddress, securityKey);
   ptm215Adapter.registerHandler(device, handler);
 
   if (registerNotificationHandler) {
-    registerNotificationHandler->enOceanDeviceRegistered(bleAddress);
+    registerNotificationHandler->enOceanDeviceRegistered(device.address);
   }
 }
 
-void BLEScannerSubscriber::registerPTM215Device(const std::string& bleAddress, std::string_view securityKey, const nodeId_t eventHandlerNodeId) {
+void BLEScannerSubscriber::registerPTM215Device(std::string_view bleAddress, std::string_view securityKey, const nodeId_t eventHandlerNodeId) {
   Device device = registerDevice(bleAddress, securityKey);
   ptm215Adapter.registerHandler(device, eventHandlerNodeId);
 
   if (registerNotificationHandler) {
-    registerNotificationHandler->enOceanDeviceRegistered(bleAddress);
+    registerNotificationHandler->enOceanDeviceRegistered(device.address);
   }
 }
 
-void BLEScannerSubscriber::registerPTM215Device(const std::string& bleAddress, const SecurityKey securityKey, PTM215EventHandler* handler) {
+void BLEScannerSubscriber::registerPTM215Device(std::string_view bleAddress, const SecurityKey securityKey, PTM215EventHandler* handler) {
   Device device = registerDevice(bleAddress, securityKey);
   ptm215Adapter.registerHandler(device, handler);
 
   if (registerNotificationHandler) {
-    registerNotificationHandler->enOceanDeviceRegistered(bleAddress);
+    registerNotificationHandler->enOceanDeviceRegistered(device.address);
   }
 }
 
-void BLEScannerSubscriber::registerDataDevice(const std::string& bleAddress, std::string_view securityKey, DataEventHandler* handler) {
+void BLEScannerSubscriber::registerDataDevice(std::string_view bleAddress, std::string_view securityKey, DataEventHandler* handler) {
   Device device = registerDevice(bleAddress, securityKey);
   dataAdapter.registerHandler(device, handler);
 
   if (registerNotificationHandler) {
-    registerNotificationHandler->enOceanDeviceRegistered(bleAddress);
+    registerNotificationHandler->enOceanDeviceRegistered(device.address);
   }
 }
 
-void BLEScannerSubscriber::registerDataDevice(const std::string& bleAddress, std::string_view securityKey, const nodeId_t handlerId) {
+void BLEScannerSubscriber::registerDataDevice(std::string_view bleAddress, std::string_view securityKey, const nodeId_t handlerId) {
   Device device = registerDevice(bleAddress, securityKey);
   dataAdapter.registerHandler(device, handlerId);
 
   if (registerNotificationHandler) {
-    registerNotificationHandler->enOceanDeviceRegistered(bleAddress);
+    registerNotificationHandler->enOceanDeviceRegistered(device.address);
   }
 }
 

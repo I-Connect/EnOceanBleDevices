@@ -4,7 +4,9 @@ namespace EnOcean {
 
 void hexStringToByteArray(std::string_view stringInput, byte* output, uint8_t byteLength) {
   for (uint8_t i = 0; i < byteLength; i++) {
-    output[i] = strtol(stringInput.substr(i * 2, 2).data(), NULL, 16);
+    char num[3] {0};
+    stringInput.copy(num, 2, i * 2);
+    output[i] = strtol(num, NULL, 16);
   }
 }
 
