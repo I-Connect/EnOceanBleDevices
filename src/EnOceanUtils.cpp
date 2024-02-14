@@ -49,4 +49,24 @@ char* printBuffer(const byte* buff, const size_t size, const boolean asChars, co
   return output;
 }
 
+void parsePayloadParameters(const Payload& payload, std::vector<Parameter>& result) {
+  byte* payloadPtr = const_cast<byte*>(payload.data.raw);
+  uint8_t payloadSize = payload.len - 11;
+
+  while (payloadPtr < payload.data.raw + payloadSize) {
+    Parameter parameter;
+    parameter.size = pow(2, *payloadPtr >> 6);                      // leftmost 2 bits
+    parameter.type = (ParameterType)(*payloadPtr & 0b00111111);     // rightmost 6 bits
+    payloadPtr++;
+    if (parameter.size > 4) { // custom size, specified in first byte of data
+      // TODO read custom size parameter, skipped for now
+      parameter.size = *payloadPtr++;
+    } else {
+      memcpy(&parameter.value, payloadPtr, parameter.size);
+    }
+    payloadPtr += parameter.size;
+    result.push_back(parameter);
+  }
+}
+
 } // namespace EnOcean

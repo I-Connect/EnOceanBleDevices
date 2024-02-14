@@ -54,29 +54,10 @@ void DataEventAdapter::callEventHandlers(DataEvent& event) {
 DataEvent DataEventAdapter::mapToDataEvent(Device& device, Payload& payload) {
   DataEvent event;
 
-  parsePayloadParameters(payload.data.raw, payload.len - 11, event.parameters);
+  parsePayloadParameters(payload, event.parameters);
   event.device     = &device;
 
   return event;
-}
-
-void DataEventAdapter::parsePayloadParameters(byte* payload, const size_t size, std::vector<Parameter>& result) {
-  byte* payloadPtr = payload;
-
-  while (payloadPtr < payload + size) {
-    Parameter parameter;
-    parameter.size = pow(2, *payloadPtr >> 6);                      // leftmost 2 bits
-    parameter.type = (ParameterType)(*payloadPtr & 0b00111111);     // rightmost 6 bits
-    payloadPtr++;
-    if (parameter.size > 4) { // custom size, specified in first byte of data
-      // TODO read custom size parameter, skipped for now
-      parameter.size = *payloadPtr++;
-    } else {
-      memcpy(&parameter.value, payloadPtr, parameter.size);
-    }
-    payloadPtr += parameter.size;
-    result.push_back(parameter);
-  }
 }
 
 } // namespace EnOcean
