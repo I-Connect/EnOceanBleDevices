@@ -89,7 +89,7 @@ class BLEScannerSubscriber : public BleScanner::Subscriber {
      *
      * If 0 then no commissioning is active
      */
-    NimBLEAddress activeCommissioningAddress = NimBLEAddress("");
+    NimBLEAddress activeCommissioningAddress = NimBLEAddress();
 
     PTM215EventAdapter ptm215Adapter;
     DataEventAdapter dataAdapter;
@@ -108,7 +108,7 @@ class BLEScannerSubscriber : public BleScanner::Subscriber {
      *
      * @param advertisedDevice Holds BLE address and payload
      */
-    void onResult(BLEAdvertisedDevice* advertisedDevice) override;
+    void onResult(const BLEAdvertisedDevice* advertisedDevice) override;
 
     /**
      * @brief Construct the Payload object from the data in advertisedDevice
@@ -116,7 +116,7 @@ class BLEScannerSubscriber : public BleScanner::Subscriber {
      * @param advertisedDevice
      * @return Payload
      */
-    Payload getPayload(NimBLEAdvertisedDevice* advertisedDevice);
+    Payload getPayload(const NimBLEAdvertisedDevice* advertisedDevice);
 
     /**
      * @brief Dedupes messages, Checks sequence counter and security key

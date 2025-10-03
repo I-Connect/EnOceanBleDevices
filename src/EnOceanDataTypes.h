@@ -121,7 +121,7 @@ struct AccelerometerValues {
 };
 
 struct CommissioningEvent {
-  NimBLEAddress address = NimBLEAddress("");
+  NimBLEAddress address = NimBLEAddress();
   DeviceType type;
   SecurityKey securityKey;
 };

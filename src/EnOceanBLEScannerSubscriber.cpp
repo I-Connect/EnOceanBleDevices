@@ -15,7 +15,7 @@ BLEScannerSubscriber::BLEScannerSubscriber() {
 BLEScannerSubscriber::~BLEScannerSubscriber() {
 }
 
-void BLEScannerSubscriber::onResult(NimBLEAdvertisedDevice* advertisedDevice) {
+void BLEScannerSubscriber::onResult(const NimBLEAdvertisedDevice* advertisedDevice) {
   Payload payload = getPayload(advertisedDevice);
 
   if (payload.deviceType == DeviceType::UNKNOWN) {
@@ -38,15 +38,15 @@ void BLEScannerSubscriber::onResult(NimBLEAdvertisedDevice* advertisedDevice) {
   }
 }
 
-Payload BLEScannerSubscriber::getPayload(NimBLEAdvertisedDevice* advertisedDevice) {
+Payload BLEScannerSubscriber::getPayload(const NimBLEAdvertisedDevice* advertisedDevice) {
   Payload payload;
   memset(&payload, 0x00, sizeof(payload));
 
   // Pointer to first byte of payload to read next
-  uint8_t* nextPayload = advertisedDevice->getPayload();
+  const uint8_t* nextPayload = advertisedDevice->getPayload().data();
 
   // Read Len, Type, Manufacturer and counter
-  memcpy(&payload, advertisedDevice->getPayload(), 8);
+  memcpy(&payload, advertisedDevice->getPayload().data(), 8);
   nextPayload = nextPayload + 8;
 
   payload.deviceType = getTypeFromAddress(advertisedDevice->getAddress());
@@ -80,7 +80,7 @@ bool BLEScannerSubscriber::securityKeyValid(Device& device, Payload& payload) {
   unsigned char b2[16]    {0};
 
   // construct nonce
-  memcpy(nonce, device.address.getNative(), 6);
+  memcpy(nonce, device.address.getBase(), 6);
   memcpy(&nonce[6], &payload.sequenceCounter, sizeof(payload.sequenceCounter));
 
 
@@ -182,7 +182,7 @@ bool BLEScannerSubscriber::securityKeyValid(Device& device, Payload& payload) {
 void BLEScannerSubscriber::handleDataPayload(NimBLEAddress& bleAddress, Payload& payload) {
   if (activeCommissioningAddress == bleAddress) {
     // Data event received from active commissioning address -> end commissioning mode
-    activeCommissioningAddress = NimBLEAddress("");
+    activeCommissioningAddress = NimBLEAddress();
   }
   if (devices.count(bleAddress)) {
     Device& device = devices[bleAddress];
@@ -239,7 +239,7 @@ void BLEScannerSubscriber::handleCommissioningPayload(NimBLEAddress& bleAddress,
     addressBytes[i] = payload.commissioning.staticSourceAddress[5 - i];
   }
 
-  NimBLEAddress address{addressBytes};
+  NimBLEAddress address{addressBytes, BLE_ADDR_PUBLIC};
 
   CommissioningEvent event;
   event.address = address;
@@ -257,7 +257,7 @@ Device BLEScannerSubscriber::registerDevice(const std::string bleAddress, const 
 Device BLEScannerSubscriber::registerDevice(const std::string bleAddress, const SecurityKey securityKey) {
   Device device;
   memcpy(device.securityKey, securityKey, sizeof(SecurityKey));
-  NimBLEAddress address{bleAddress};
+  NimBLEAddress address{bleAddress, BLE_ADDR_PUBLIC};
   device.address   = address;
   device.type      = getTypeFromAddress(address);
   devices[address] = device;
@@ -269,7 +269,7 @@ void BLEScannerSubscriber::registerPTM215Device(const std::string bleAddress, co
   ptm215Adapter.registerHandler(device, handler);
 
   if (registerNotificationHandler) {
-    registerNotificationHandler->enOceanDeviceRegistered(bleAddress);
+    registerNotificationHandler->enOceanDeviceRegistered(NimBLEAddress(bleAddress, BLE_ADDR_PUBLIC));
   }
 }
 
@@ -278,7 +278,7 @@ void BLEScannerSubscriber::registerPTM215Device(const std::string bleAddress, co
   ptm215Adapter.registerHandler(device, eventHandlerNodeId);
 
   if (registerNotificationHandler) {
-    registerNotificationHandler->enOceanDeviceRegistered(bleAddress);
+    registerNotificationHandler->enOceanDeviceRegistered(NimBLEAddress(bleAddress, BLE_ADDR_PUBLIC));
   }
 }
 
@@ -287,7 +287,7 @@ void BLEScannerSubscriber::registerPTM215Device(const std::string bleAddress, co
   ptm215Adapter.registerHandler(device, handler);
 
   if (registerNotificationHandler) {
-    registerNotificationHandler->enOceanDeviceRegistered(bleAddress);
+    registerNotificationHandler->enOceanDeviceRegistered(NimBLEAddress(bleAddress, BLE_ADDR_PUBLIC));
   }
 }
 
@@ -296,7 +296,7 @@ void BLEScannerSubscriber::registerDataDevice(const std::string bleAddress, cons
   dataAdapter.registerHandler(device, handler);
 
   if (registerNotificationHandler) {
-    registerNotificationHandler->enOceanDeviceRegistered(bleAddress);
+    registerNotificationHandler->enOceanDeviceRegistered(NimBLEAddress(bleAddress, BLE_ADDR_PUBLIC));
   }
 }
 
@@ -305,7 +305,7 @@ void BLEScannerSubscriber::registerDataDevice(const std::string bleAddress, cons
   dataAdapter.registerHandler(device, handlerId);
 
   if (registerNotificationHandler) {
-    registerNotificationHandler->enOceanDeviceRegistered(bleAddress);
+    registerNotificationHandler->enOceanDeviceRegistered(NimBLEAddress(bleAddress, BLE_ADDR_PUBLIC));
   }
 }
 
@@ -335,9 +335,9 @@ void BLEScannerSubscriber::unRegisterAll() {
 }
 
 DeviceType BLEScannerSubscriber::getTypeFromAddress(const NimBLEAddress& address) const {
-  const uint8_t* nativeAddressLSB = address.getNative(); // LSB
+  const ble_addr_t* nativeAddressLSB = address.getBase(); // LSB
   uint8_t nativeAddress[6];
-  std::reverse_copy(nativeAddressLSB, nativeAddressLSB + 6, nativeAddress);
+  std::reverse_copy(nativeAddressLSB->val, nativeAddressLSB->val + 6, nativeAddress);
 
   if (memcmp(nativeAddress, STM550B_EMDCB_PREFIX_ADDRESS, sizeof(STM550B_EMDCB_PREFIX_ADDRESS)) == 0) {
     if ((nativeAddress[2] & 0xF0) == 0x10) {

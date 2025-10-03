@@ -32,7 +32,7 @@
   "dependencies": [
     {
       "name": "BleScanner",
-      "version": "https://github.com/I-Connect/BleScanner"
+      "version": "https://github.com/I-Connect/BleScanner#v2"
     }
   ]
 }
