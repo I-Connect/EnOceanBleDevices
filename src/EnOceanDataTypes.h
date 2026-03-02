@@ -114,31 +114,19 @@ enum class AccelerometerStatus {
 };
 
 struct AccelerometerValues {
-  AccelerometerStatus status;
-  int16_t xVector;
-  int16_t yVector;
-  int16_t zVector;
-};
+  AccelerometerStatus status; // 2bits
+  int16_t xVector; // 10bits
+  int16_t yVector; // 10 bits
+  int16_t zVector; // 10 bits
 
-struct CommissioningEvent {
-  NimBLEAddress address = NimBLEAddress("");
-  DeviceType type;
-  SecurityKey securityKey;
-};
+  explicit AccelerometerValues(uint32_t rawData)
+    : status(static_cast<AccelerometerStatus>((rawData >> 30) & 0x03)),
+      xVector((rawData & 0x3FF) - 512),
+      yVector(((rawData >> 10) & 0x3FF) - 512),
+      zVector(((rawData >> 20) & 0x3FF) - 512) {
+  }
 
-/**
- * @brief Handler for commissionEvents from a BLE Switch
- *
- * The event is sent when the switch is put into commissioning mode and when the same
- * button is pressed or released when in commissioning mode.
- *
- * Note that the handler must be able to handle receiving the same commission event multiple times!
- */
-class CommissioningEventhandler {
-  public:
-    CommissioningEventhandler() {};
-    virtual ~CommissioningEventhandler() {};
-    virtual void handleEvent(CommissioningEvent& evt) = 0;
+  AccelerometerValues() : status(AccelerometerStatus::Disabled), xVector(0), yVector(0), zVector(0) {}
 };
 
 } // namespace EnOcean
