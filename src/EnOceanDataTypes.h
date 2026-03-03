@@ -129,4 +129,25 @@ struct AccelerometerValues {
   AccelerometerValues() : status(AccelerometerStatus::Disabled), xVector(0), yVector(0), zVector(0) {}
 };
 
+struct CommissioningEvent {
+  NimBLEAddress address = NimBLEAddress("");
+  DeviceType type;
+  SecurityKey securityKey;
+};
+
+/**
+ * @brief Handler for commissionEvents from a BLE Switch
+ *
+ * The event is sent when the switch is put into commissioning mode and when the same
+ * button is pressed or released when in commissioning mode.
+ *
+ * Note that the handler must be able to handle receiving the same commission event multiple times!
+ */
+class CommissioningEventhandler {
+  public:
+    CommissioningEventhandler() {};
+    virtual ~CommissioningEventhandler() {};
+    virtual void handleEvent(CommissioningEvent& evt) = 0;
+};
+
 } // namespace EnOcean
